@@ -126,14 +126,14 @@ knp_time: ~
 varspool_websocket:
     servers:
         default: # Server name
-            listen: "ws://%palladium_host%:%palladium_port%" # default: ws://localhost:8000
+            listen: "ws://%palladium_host%:%palladium_port_internal%" # default: ws://localhost:8000
 
             # Applications this server will allow
             applications:
                 - palladium
 
             # Origin control
-            check_origin: true
+            check_origin: false
             allow_origin: # default: just localhost (not useful!)
                 - "localhost"
                 - "127.0.0.1"
