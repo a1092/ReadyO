@@ -87,7 +87,7 @@ fos_user:
 lexik_jwt_authentication:
     private_key_path: %kernel.root_dir%/var/jwt/private.pem   # ssh private key path
     public_key_path:  %kernel.root_dir%/var/jwt/public.pem    # ssh public key path
-    pass_phrase:      'awiz@readyo'                           # ssh key pass phrase
+    pass_phrase:      "%jwt_passphrase%"                           # ssh key pass phrase
     token_ttl:        86400                                   # token ttl - defaults to 86400
 
 
