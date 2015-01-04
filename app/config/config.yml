@@ -126,7 +126,7 @@ knp_time: ~
 varspool_websocket:
     servers:
         default: # Server name
-            listen: "ws://%palladium_host%:%palladium_port_internal%" # default: ws://localhost:8000
+            listen: "ws://%palladium_proxy_host%:%palladium_proxy_port%" # default: ws://localhost:8000
 
             # Applications this server will allow
             applications:
