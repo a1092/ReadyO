@@ -1,15 +1,4 @@
-<<<<<<< HEAD
-/web/bundles/
-/app/bootstrap.php.cache
-/app/cache/*
-/app/config/parameters.yml
-/app/logs/*
-!app/cache/.gitkeep
-!app/logs/.gitkeep
-/build/
-/vendor/
-/bin/
-=======
+
 # Cache and logs (Symfony2)
 /app/cache/*
 /app/logs/*
@@ -30,6 +19,7 @@
 # Managed by Composer
 /app/bootstrap.php.cache
 /var/bootstrap.php.cache
+/build/
 /bin/*
 !bin/console
 !bin/symfony_requirements
@@ -45,5 +35,4 @@
 /phpunit.xml
 
 # Composer PHAR
->>>>>>> 68342a71f534eacd824ffe7c0b83d611022634e5
 /composer.phar
