@@ -1,0 +1,151 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'palladium' %}
+
+
+{% block body %}
+
+	<h3>
+		<i class="fa fa-angle-right"></i> Palladium Console
+		<div class="pull-right" id="websocket-status">
+		</div>
+	</h3>
+
+	<div class="row">
+		<div class="col-md-4">Topic</div>
+		<div class="col-md-6">Data</div>
+		<div class="col-md-2"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+
+			<select style="width: 100%;" id="message-topic">
+			<option value=""></option>
+			{% for topic in topics %}
+			<option value="{{ topic.path }}">{{ topic.path }}</option>
+			{% endfor %}
+			</select>
+
+		</div>
+		<div class="col-md-6"><textarea style="width: 100%;"  id="message-data">{}</textarea></div>
+		<div class="col-md-2"><button type="button" onclick="commit();">Envoyer</button></div>
+	</div>
+
+	<h4>Real time</h4>
+	<div class="row">
+       	<div class="col-md-2">Emmeteur</div>
+       	<div class="col-md-5">Topic</div>
+       	<div class="col-md-5">Data</div>
+    </div>
+
+	<div id="rt-stream">
+
+	</div>
+
+{% endblock %}
+
+{% block javascripts %}
+	
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.10.0/codemirror.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.10.0/addon/edit/matchbrackets.min.js"></script>
+
+	<script>
+		var editor = CodeMirror.fromTextArea(document.getElementById("message-data"), {
+			matchBrackets: true,
+			autoCloseBrackets: true,
+			mode: "application/ld+json",
+			lineWrapping: false,
+			lineNumbers: true
+		});
+
+		editor.setSize("100%", "100px");
+	</script>
+
+	<script>
+	    var url = 'ws://{{ palladium.host }}:{{ palladium.port }}/{{ palladium.channel }}';
+
+	    var socket;
+      
+	    function PalladiumConnect() {
+	    	
+			if (window.MozWebSocket) {
+				socket = new MozWebSocket(url);
+			} else if (window.WebSocket) {
+				socket = new WebSocket(url);
+			} else {
+				throw "No websocket support detected"
+			}
+
+			socket.binaryType = 'blob';
+
+			socket.onopen = function() {
+				socket.send('{"topic":"fr/readyo/palladium/register", "data": {"privateKey": "{{ palladium.key }}", "subscribtions":["^fr/readyo/palladium/"]}}');
+				$("#websocket-status").html('<button class="btn btn-success">Connected to {{ palladium.host }}:{{ palladium.port }}</button>');
+				//$("#websocket-status").addClass("connected").removeClass("disconnected");
+			}
+
+			socket.onclose = function() {
+				$("#websocket-status").html('<button class="btn btn-danger" onclick="PalladiumConnect();">Disconnected to {{ palladium.host }}:{{ palladium.port }}</button>');
+				//$("#websocket-status").addClass("disconnected").removeClass("connected");
+			}
+		      
+		      socket.onmessage = function(message) {
+		      	
+		        data = JSON && JSON.parse(message.data) || $.parseJSON(message.data);
+		       
+		        var stringify = JSON.stringify(data.data, undefined, 2);
+                var prettify = hljs.highlightAuto(stringify).value;
+                prettify = hljs.fixMarkup(prettify);
+
+
+		        $("#rt-stream").prepend('<div class="row"> \
+		        	<div class="col-md-2">'+data.from+'</div> \
+		        	<div class="col-md-2">'+moment(data.time*1000, "x").format("DD/MM/YYYY HH:mm:ss")+'</div> \
+		        	<div class="col-md-3">'+data.topic+'</div> \
+		        	<div class="col-md-5"><pre><code class="json hljs">'+prettify+'</code></pre></div> \
+		        </div>');
+		      }
+
+		      socket.onerror = function() { alert('Une erreur est survenue'); }
+
+		}
+
+	
+
+	    function commit() {
+	    	var topic = $("#message-topic").val();
+	    	var data = editor.getValue();
+
+	    	socket.send('{"topic":"'+topic+'", "data": '+data+'}');
+	    }
+
+	    PalladiumConnect();
+
+
+		
+
+
+	</script>
+
+
+{% endblock %}
+
+{% block stylesheets %}
+
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/4.10.0/codemirror.min.css">
+
+	<style>
+	.connected {
+  		background-color: #51a351;
+  		color: #FFF;
+  	}
+
+  	.disconnected {
+  		background-color: #bd362f;
+  		color: #FFF;
+  	}
+  	</style>
+{% endblock %}

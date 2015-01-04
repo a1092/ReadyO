@@ -1,0 +1,62 @@
+admin_palladium_application:
+    path:     /admin/palladium/application
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Application:index }
+
+admin_palladium_application_new:
+    path:     /admin/palladium/application/new
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Application:new }
+
+admin_palladium_application_show:
+    path:     /admin/palladium/application/{applicationid}
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Application:show }
+
+admin_palladium_application_edit:
+    path:     /admin/palladium/application/{applicationid}/edit
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Application:edit }
+
+
+admin_palladium_topic:
+    path:     /admin/palladium/topic
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Topic:index }
+
+admin_palladium_topic_new:
+    path:     /admin/palladium/topic/new
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Topic:new }
+
+admin_palladium_topic_show:
+    path:     /admin/palladium/topic/{topicid}
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Topic:show }
+
+admin_palladium_topic_edit:
+    path:     /admin/palladium/topic/{topicid}/edit
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Topic:edit }
+
+
+
+admin_palladium_output:
+    path:     /admin/palladium/output
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Output:index }
+
+admin_palladium_output_new:
+    path:     /admin/palladium/output/new
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Output:new }
+
+admin_palladium_output_show:
+    path:     /admin/palladium/output/{outputid}
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Output:show }
+
+admin_palladium_output_edit:
+    path:     /admin/palladium/output/{outputid}/edit
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Output:edit }
+
+
+admin_palladium_console:
+    path:     /admin/palladium/console
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Console:index }
+
+admin_palladium_api:
+    path:     /admin/palladium/api
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Api:index }
+
+
+

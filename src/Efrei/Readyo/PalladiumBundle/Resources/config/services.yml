@@ -1,0 +1,12 @@
+parameters:
+#    efrei_readyo_palladium.example.class: Efrei\Readyo\PalladiumBundle\Example
+
+services:
+#    efrei_readyo_palladium.example:
+#        class: %efrei_readyo_palladium.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+    palladium:
+        class: Efrei\Readyo\PalladiumBundle\Application\PalladiumApplication
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: varspool_websocket.application, key: palladium }

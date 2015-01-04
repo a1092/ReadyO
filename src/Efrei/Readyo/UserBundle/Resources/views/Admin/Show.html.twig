@@ -1,0 +1,146 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'users' %}
+
+
+{% block body %}
+	<div class="row">
+    	<div class="col-lg-9 main-chart">
+
+			<h3>
+				<i class="fa fa-user"></i> <span class="text-capitalize">{{ user.firstname }}</span> <span class="text-uppercase">{{ user.lastname }}</span>
+				<div class="pull-right">
+					<a class="btn btn-theme03" href="{{ path('admin_user_register') }}">Modifier</a>
+				</div>
+			</h3>
+
+			<div class="row ">
+          		<div class="col-lg-12">
+          			<div class="form-panel">
+                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Inscription</h4>
+
+                  	  	<div class="row">
+                  	  		<div class="col-md-4">Created at {{ user.createdAt|date("d/m/Y H:i") }}</div>
+                  	  		<div class="col-md-4">Confirmed {% if user.confirmationToken is not null %}<i class="fa fa-times-circle"></i>{% else %}<i class="fa fa-check-circle"></i>{% endif %}</div>
+                  	  		<div class="col-md-4">Last login {% if user.lastLogin is not null %}{{ user.lastLogin|date("d/m/Y H:i") }}{% endif %}</div>
+                  	  	</div>
+          			</div>
+          		</div>
+          	</div>
+
+          	<div class="row">
+          		<div class="col-lg-12">
+          			<div class="form-panel">
+                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Informations personnelles</h4>
+
+                  	  	<div class="row">
+                  	  		<div class="col-md-4">Date de naissance {{ user.birthdate|date("d/m/Y") }} </div>
+                  	  		<div class="col-md-4">Sexe {{ user.gender }}</div>
+                  	  		<div class="col-md-4">Email {{ user.email }}</div>
+                  	  	</div>
+          			</div>
+          		</div>
+          	</div>
+
+          	<div class="row">
+          		<div class="col-lg-12">
+          			<div class="form-panel">
+                  	  <h4 class="mb"><i class="fa fa-angle-right"></i> Rôles</h4>
+
+                  	  	<div class="row">
+                  	  		<div class="col-md-4">Username {{ user.username }}</div>
+                  	  		<div class="col-md-4">
+                  	  			Animateur
+
+                  	  			<div class="col-sm-6 text-center">
+                                  <div class="switch switch-square"
+                                       data-on-label="<i class=' fa fa-check'></i>"
+                                       data-off-label="<i class='fa fa-times'></i>">
+                                      <input type="checkbox" {% if "ROLE_ANIMATEUR" in user.roles %}checked="checked"{% endif %}  onchange="changePromotion('ROLE_ANIMATEUR', this);" />
+                                  </div>
+                              	</div>
+                              
+                  	  		</div>
+                  	  		<div class="col-md-4">
+                  	  			Admin 
+                  	  			<div class="col-sm-6 text-center">
+                                  <div class="switch switch-square"
+                                       data-on-label="<i class=' fa fa-check'></i>"
+                                       data-off-label="<i class='fa fa-times'></i>">
+                                      <input type="checkbox" {% if "ROLE_ADMIN" in user.roles %}checked="checked"{% endif %} onchange="changePromotion('ROLE_ADMIN', this);" />
+                                  </div>
+                              	</div>
+                            </div>
+                  	  	</div>
+          			</div>
+          		</div>
+          	</div>
+
+
+		</div>
+		<div class="col-lg-3 ds">
+            <!--COMPLETED ACTIONS DONUTS CHART-->
+            <h3>CONNEXIONS</h3>
+
+            {% for token in user.tokens|reverse|slice(0, 5) %}  
+	          <!-- First Action -->
+	          <div class="desc">
+	            <div class="thumb">
+	                {% if token.isRevoked == 1 or token.expiredAt < date() %}
+	                	<span class="badge bg-theme" style="background-color: #EC2D2D;"><i class="fa fa-times-circle"></i></span>
+	                {% else %}
+	                	<span class="badge bg-theme" style="background-color: #56C540;"><i class="fa fa-check-circle"></i></span>
+	                {% endif %}
+	            </div>
+	            <div class="details">
+	                <p><muted>{{ time_diff(token.grantedAt) }}</muted><br/>
+	                   Connexion via <i class="fa fa-globe"></i> Browser
+	                </p>
+	            </div>
+	          </div>
+	        {% endfor %}
+	    </div>
+	</div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/bootstrap-switch.js') }}"></script>
+
+	<script>
+		function changePromotion(role, input) {
+
+			if($(input).is(':checked')) {
+				action = "promote";
+			} else {
+				action = "demote";
+			}
+
+			$.ajax({
+				url : '{{ path('admin_user_promotion', {'userid' : user.id }) }}',
+				type : 'POST',
+				data: {
+					'role' : role,
+					'action' : action
+				},
+				//dataType : 'json',
+				success : function(code_html, statut){ // success est toujours en place, bien sûr !
+					$.gritter.add({
+						title: 'Mise à jour <i class="fa fa-check-circle"></i>',
+						text: 'La modification a été enregistrée.'
+					});
+				},
+
+				error : function(resultat, statut, erreur){
+					$.gritter.add({
+						title: 'Mise à jour <i class="fa fa fa-times-circle"></i>',
+						text: 'La mise à jour des rôles a échoué. <br/>Veuillez réessayer plus tard.'
+					});
+				}
+		    });
+
+		}
+	</script>
+{% endblock %}

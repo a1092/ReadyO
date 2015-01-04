@@ -1,0 +1,7 @@
+parameters:
+#    efrei_readyo_webradio.example.class: Efrei\Readyo\WebradioBundle\Example
+
+services:
+#    efrei_readyo_webradio.example:
+#        class: %efrei_readyo_webradio.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,23 @@
+parameters:
+#    efrei_readyo_user.example.class: Efrei\Readyo\UserBundle\Example
+
+services:
+#    efrei_readyo_user.example:
+#        class: %efrei_readyo_user.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+    efrei_readyo_user.api.event.jwt_created_listener:
+        class: Efrei\Readyo\UserBundle\EventListener\JWTCreatedListener
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    efrei_readyo_user.api.event.jwt_decoded_listener:
+        class: Efrei\Readyo\UserBundle\EventListener\JWTDecodedListener
+        arguments: ["@doctrine.orm.entity_manager"]
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecoded }
+
+    efrei_readyo_user.api.event.authentication_success_listener:
+        class: Efrei\Readyo\UserBundle\EventListener\AuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }

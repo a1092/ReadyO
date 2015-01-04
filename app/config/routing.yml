@@ -1,0 +1,55 @@
+efrei_readyo_palladium:
+    resource: "@EfreiReadyoPalladiumBundle/Resources/config/routing.yml"
+    prefix:   /
+
+api_v1_user:
+    type:     rest
+    resource: "@EfreiReadyoUserBundle/Resources/config/routing_api1.yml"
+    prefix:   /api/v1
+
+api_v1_login:
+    type:     rest
+    resource: "@EfreiReadyoUserBundle/Resources/config/routing_login.yml"
+    prefix:   /api
+
+api_v1_webradio:
+    type:     rest
+    resource: "@EfreiReadyoWebradioBundle/Resources/config/routing_api1.yml"
+    prefix:   /api/v1
+
+#api_v1_music:
+#    type:     rest
+#    resource: "@EfreiReadyoMusicBundle/Resources/config/routing_api1.yml"
+#    prefix:   /api/v1
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix:   /admin/
+
+fos_user_registration:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix:   /
+
+efrei_readyo_music:
+    resource: "@EfreiReadyoMusicBundle/Resources/config/routing.yml"
+    prefix:   /
+
+efrei_readyo_user:
+    resource: "@EfreiReadyoUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+admin_user_dashboard:
+    path:     /admin/dashboard
+    defaults: { _controller: EfreiReadyoUserBundle:AdminUser:dashboard }
+    requirements:
+        _method:  GET
+
+
+
+efrei_readyo_webradio:
+    resource: "@EfreiReadyoWebradioBundle/Resources/config/routing.yml"
+    prefix:   /
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /doc

@@ -1,0 +1,109 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'webradio' %}
+
+
+{% block body %}
+	{{ form_start(form, {'attr' : {'class': 'form-horizontal style-form'}}) }}
+			
+	<h3>
+		<i class="fa fa-angle-right"></i> {% if show.id is null %} Nouvelle Emission {% else %} Modication d'Emission{% endif %}
+		<div class="pull-right">
+			{% if show.id is null %} <a href="{{ path('admin_show_index') }}" class="btn btn-theme04">Annuler</a> {% else %} <a href="{{ path('admin_show_show', {'showid' : show.id}) }}" class="btn btn-theme04">Annuler</a> {% endif %}
+			<button class="btn btn-theme03" type="submit">Enregistrer</button>
+		</div>
+	</h3>
+
+	<div class="form-panel">
+		<h4 class="mb"><i class="fa fa-angle-right"></i> Informations principales</h4>
+		<div class="form-group">
+			<div class="col-sm-2">
+				{{ form_label(form.type, null, {'attr' : {'class' : 'control-label' }}) }}
+			</div>
+			<div class="col-sm-4">
+			    {{ form_widget(form.type, {'attr' : {'class' : 'form-control'}}) }}
+			</div>
+
+			<div class="col-sm-2">
+				{{ form_label(form.isPublish, null, {'attr' : {'class' : 'control-label' }}) }}
+			</div>
+			<div class="col-sm-4">
+			    
+			    <div class="switch switch-square"
+                   data-on-label="<i class=' fa fa-check'></i>"
+                   data-off-label="<i class='fa fa-times'></i>">
+                  {{ form_widget(form.isPublish, {'attr' : {'class' : 'form-control'}}) }}
+              </div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-2">
+				{{ form_label(form.title, null, {'attr' : {'class' : 'control-label' }}) }}
+			</div>
+			<div class="col-sm-10">
+			    {{ form_widget(form.title, {'attr' : {'class' : 'form-control'}}) }}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-2">
+				{{ form_label(form.shortTitle, null, {'attr' : {'class' : 'control-label' }}) }}
+			</div>
+			<div class="col-sm-10">
+			    {{ form_widget(form.shortTitle, {'attr' : {'class' : 'form-control'}}) }}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-2">
+				{{ form_label(form.subTitle, null, {'attr' : {'class' : 'control-label' }}) }}
+			</div>
+			<div class="col-sm-10">
+			    {{ form_widget(form.subTitle, {'attr' : {'class' : 'form-control'}}) }}
+			</div>
+		</div>
+	</div>
+
+	<div class="form-panel">
+		<h4 class="mb"><i class="fa fa-angle-right"></i> {{ form_label(form.description) }}</h4>
+		{{ form_errors(form.description) }}
+		<div>
+			{{ form_widget(form.description, {'attr' : {'class' : 'form-control'}}) }}
+		</div>
+	</div>
+
+	<div class="form-panel">
+		<h4 class="mb"><i class="fa fa-angle-right"></i> Illustration</h4>
+		<div class="form-group">
+			<div class="col-sm-2">
+				{{ form_label(form.pictureBig.file, null, {'attr' : {'class' : 'control-label' }}) }}
+			</div>
+			<div class="col-sm-10">
+			    {{ form_widget(form.pictureBig.file, {'attr' : {'class' : 'form-control'}}) }}
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-2">
+				{{ form_label(form.pictureSmall.file, null, {'attr' : {'class' : 'control-label' }}) }}
+			</div>
+			<div class="col-sm-10">
+			    {{ form_widget(form.pictureSmall.file, {'attr' : {'class' : 'form-control'}}) }}
+			</div>
+		</div>
+
+	</div>
+
+		
+		
+		{{ form_rest(form) }}
+  
+
+  		{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/bootstrap-switch.js') }}"></script>
+{% endblock %}

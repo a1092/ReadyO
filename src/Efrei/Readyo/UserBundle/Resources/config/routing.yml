@@ -1,0 +1,27 @@
+admin_user_dashboard:
+    path:     /admin/dashboard
+    defaults: { _controller: EfreiReadyoUserBundle:AdminUser:dashboard }
+    requirements:
+        _method:  GET
+
+
+admin_user_list:
+    path:     /admin/users
+    defaults: { _controller: EfreiReadyoUserBundle:AdminUser:list }
+
+admin_user_show:
+    path:     /admin/users/{userid}
+    defaults: { _controller: EfreiReadyoUserBundle:AdminUser:show }
+    requirements:
+        userid:  \d+
+
+admin_user_promotion:
+    path:     /admin/users/{userid}/promotion
+    defaults: { _controller: EfreiReadyoUserBundle:AdminUser:promotion }
+    requirements:
+        userid:  \d+
+
+
+admin_user_register:
+    path:     /admin/users/register
+    defaults: { _controller: EfreiReadyoUserBundle:AdminUser:add }

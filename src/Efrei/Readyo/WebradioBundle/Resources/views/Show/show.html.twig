@@ -1,0 +1,65 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'webradio' %}
+
+
+{% block body %}
+	<div class="row">
+    	<div class="col-lg-9 main-chart">
+
+			<h1>
+				<i class="fa fa-angle-right"></i>  {{ show.title }} <small><span class="label label-primary">{{ show.type}}</span>{% if show.isPublish %}<i class="fa fa-eye"></i>{% else %}<i class="fa fa-eye-slash"></i>{% endif %}</small>
+				<div class="pull-right">
+					<a class="btn btn-theme02" href="{{ path('admin_schedule_new', { 'showId' : show.id }) }}">Nouveau Programme</a>
+					<a class="btn btn-theme03" href="{{ path('admin_show_edit', { 'showid' : show.id }) }}">Modifier</a>
+				</div>
+			</h1>
+			<h4>{{ show.subTitle }}</h4>
+			<p>{{ show.description }}</p>
+
+			{% for row in show.schedules|batch(6) %}
+      			<div class="row mt">
+      				{% for schedule in row %}
+					<div class="col-lg-2 col-md-2 col-sm-2 mb">
+						<div class="content-panel pn">
+							<div id="spotify" class="show-{{show.id}}">
+								<div class="col-xs-4 col-xs-offset-8">
+									<a class="btn btn-sm btn-clear-g" href="{{ path('admin_schedule_edit', { 'scheduleId' : schedule.id}) }}"><i class="fa fa-eye"></i></a>
+								</div>
+							</div>
+							<p class="followers">
+								<i class="fa fa-user"></i> {{ schedule.title }}
+							</p>
+						</div>
+					</div>
+      				{% endfor %}
+				</div>
+				{% endfor %}
+
+		</div>
+		<div class="col-lg-3 ds">
+			<h3>DASHBOARD</h3>
+			<div class="row mt">
+				<div class="col-md-12 col-sm-12 mb">
+		           <!-- REVENUE PANEL -->
+					<div class="darkblue-panel pn">
+						<div class="darkblue-header">
+							<h5>Audience</h5>
+						</div>
+						<div class="chart mt">
+							<div class="sparkline" data-type="line" data-resize="true" data-height="75" data-width="90%" data-line-width="1" data-line-color="#fff" data-spot-color="#fff" data-fill-color="" data-highlight-line-color="#fff" data-spot-radius="4" data-data="[200,135,667,333,526,996,564,123,890,464,655]"></div>
+						</div>
+						<p class="mt"><b>25</b><br/>Auditeurs en moyenne</p>
+					</div>
+				</div>
+			</div>
+	    </div>
+	</div>
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+	
+{% endblock %}

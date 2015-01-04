@@ -1,0 +1,26 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'palladium' %}
+
+
+{% block body %}
+
+	<h3>
+		<i class="fa fa-angle-right"></i> Api Documentation
+	</h3>
+
+	<pre>
+		<code class="json">{{ JSON_DOC }}</code>
+	</pre>
+{% endblock %}
+
+{% block javascripts %}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+	<script>hljs.initHighlightingOnLoad();</script>
+	
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+	
+{% endblock %}

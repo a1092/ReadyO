@@ -1,0 +1,51 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'webradio' %}
+
+
+{% block body %}
+
+	<h3>
+		<i class="fa fa-angle-right"></i> Emissions
+		<div class="pull-right">
+			<a class="btn btn-theme03" href="{{ path('admin_show_new') }}">Nouvelle Emission</a>
+		</div>
+	</h3>
+
+	<div class="row mt">
+      		<div class="col-lg-12">
+      			{% for row in shows|batch(6) %}
+      			<div class="row">
+      				{% for show in row %}
+					<div class="col-lg-2 col-md-2 col-sm-2 mb">
+						<div class="content-panel pn">
+							<div id="spotify" class="show-{{show.id}}">
+								<div class="col-xs-4 col-xs-offset-8">
+									<a class="btn btn-sm btn-clear-g" href="{{ path('admin_show_show', { 'showid' : show.id}) }}"><i class="fa fa-eye"></i></a>
+								</div>
+							</div>
+							<p class="followers">
+								<i class="fa fa-user"></i> {{ show.shortTitle }}
+							</p>
+						</div>
+					</div>
+      				{% endfor %}
+				</div>
+				{% endfor %}
+      		</div>
+      	</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+	<script type="text/javascript" src="{{ asset('js/jquery.backstretch.min.js') }}"></script>
+	
+  	<script>
+		{% for show in shows %}
+			{% if show.pictureSmall is defined %}
+        	$(".show-{{show.id}}").backstretch("{{ app.request.getBaseURL() }}/{{ show.pictureSmall.getWebPath() }}", {speed: 500});
+        	{% endif %}
+		{% endfor %}
+    </script>
+{% endblock %}

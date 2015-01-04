@@ -1,0 +1,20 @@
+api_v1_user_profile:
+    type:     rest
+    path:     /users/profile
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:profile }
+    requirements:
+        _method:  GET
+
+api_v1_user_edit:
+    type:     rest
+    path:     /users/edit
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:editProfile }
+    requirements:
+        _method:  POST
+
+api_v1_user_edit_picture:
+    type:     rest
+    path:     /users/edit/picture
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:editPicture }
+    requirements:
+        _method:  POST

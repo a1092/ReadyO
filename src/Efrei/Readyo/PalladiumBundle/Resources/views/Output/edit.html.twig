@@ -1,0 +1,33 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'palladium' %}
+
+
+{% block body %}
+
+	{{ form_start(form, {'attr' : {'class': 'form-horizontal style-form'}}) }}
+	<h3>
+		<i class="fa fa-angle-right"></i> Output
+		<div class="pull-right">
+			<div class="pull-right">
+			<a href="{{ path('admin_palladium_output') }}" class="btn btn-theme04">Annuler</a>
+			<button class="btn btn-theme03" type="submit">Enregistrer</button>
+			
+			{# {% if application.id is null %} <a href="{{ path('admin_palladium_application') }}" class="btn btn-theme04">Annuler</a> {% else %} <a href="{{ path('admin_palladium_application_show', {'applicationid' : application.id}) }}" class="btn btn-theme04">Annuler</a> {% endif %} #}
+			
+		</div>
+		</div>
+	</h3>
+
+	
+
+
+
+	{{ form_rest(form) }}
+  
+
+	{{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

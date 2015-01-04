@@ -1,0 +1,32 @@
+admin_show_index:
+    path:     /admin/show
+    defaults: { _controller: EfreiReadyoWebradioBundle:Show:index }
+    requirements:
+        _method:  GET
+
+admin_show_new:
+    path:     /admin/show/new
+    defaults: { _controller: EfreiReadyoWebradioBundle:Show:new }
+
+admin_show_edit:
+    path:     /admin/show/{showid}/edit
+    defaults: { _controller: EfreiReadyoWebradioBundle:Show:edit }
+    requirements:
+        userid:  \d+
+
+admin_show_show:
+    path:     /admin/show/{showid}
+    defaults: { _controller: EfreiReadyoWebradioBundle:Show:show }
+    requirements:
+        userid:  \d+
+
+
+admin_schedule_new:
+    path:     /admin/schedule/new/{showId}
+    defaults: { _controller: EfreiReadyoWebradioBundle:Schedule:new }
+
+admin_schedule_edit:
+    path:     /admin/schedule/{scheduleId}/edit
+    defaults: { _controller: EfreiReadyoWebradioBundle:Schedule:edit }
+    requirements:
+        userid:  \d+

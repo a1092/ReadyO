@@ -1,0 +1,27 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'webradio' %}
+
+
+{% block body %}
+	{{ form_start(form, {'attr' : {'class': 'form-horizontal style-form'}}) }}
+			
+	<h3>
+		<i class="fa fa-angle-right"></i> {% if schedule.id is null %} Nouveau programme {% else %} Modification d'un Programme{% endif %}
+		<div class="pull-right">
+			<a href="{{ path('admin_show_show', { 'showid' : schedule.show.id }) }}" class="btn btn-theme04">Annuler</a>
+			<button class="btn btn-theme03" type="submit">Enregistrer</button>
+		</div>
+	</h3>
+
+		
+		{{ form_rest(form) }}
+  
+
+  		{{ form_end(form) }}
+
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/bootstrap-switch.js') }}"></script>
+{% endblock %}

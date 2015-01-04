@@ -1,0 +1,13 @@
+api_user_login:
+    type:     rest
+    path:     /login
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:login }
+    requirements:
+        _method:  POST
+
+api_user_register:
+    type:     rest
+    path:     /register
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:register }
+    requirements:
+        _method:  POST

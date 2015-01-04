@@ -1,0 +1,39 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'palladium' %}
+
+
+{% block body %}
+	<h3>
+		<i class="fa fa-angle-right"></i> Output Channels
+		<div class="pull-right">
+			<a class="btn btn-theme03" href="{{ path('admin_palladium_output_new') }}">Nouveau output</a>
+		</div>
+	</h3>
+
+
+	<table class="table table-stripped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>Description</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for output in outputs %}
+				<tr>
+					<td>{{ output.id }}</td>
+					<td>{{ output.name }}</td>
+					<td>{{ output.description }}</td>
+					<td><a class="btn btn-info btn-sm" href="{{ path('admin_palladium_output_edit', {outputid: output.id})}}"><i class="fa fa-pencil"></i></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'users' %}
+
+
+{% block body %}
+	{{ form_start(form) }}
+		<h3>
+			<i class="fa fa-angle-right"></i> Enregistrement d'un utilisateur
+			<div class="pull-right">
+				<button class="btn btn-theme03" type="submit">Enregistrer</button>
+			</div>
+		</h3>
+
+		<div>
+		    {{ form_label(form.email) }}
+		    {{ form_errors(form.email) }}
+		    {{ form_widget(form.email) }}
+		</div>
+		<div>
+		    {{ form_label(form.username) }}
+		    {{ form_errors(form.username) }}
+		    {{ form_widget(form.username) }}
+		</div>
+		<div>
+		    {{ form_label(form.firstname) }}
+		    {{ form_errors(form.firstname) }}
+		    {{ form_widget(form.firstname) }}
+		</div>
+		<div>
+		    {{ form_label(form.lastname) }}
+		    {{ form_errors(form.lastname) }}
+		    {{ form_widget(form.lastname) }}
+		</div>
+		<div>
+		    {{ form_label(form.gender) }}
+		    {{ form_errors(form.gender) }}
+		    {{ form_widget(form.gender) }}
+		</div>
+		<div>
+		    {{ form_label(form.birthdate) }}
+		    {{ form_errors(form.birthdate) }}
+		    {{ form_widget(form.birthdate) }}
+		</div>
+		<div>
+		    {{ form_label(form.picture) }}
+		    {{ form_errors(form.picture) }}
+		    {{ form_widget(form.picture) }}
+		</div>
+		<div>
+		    {{ form_label(form.plainPassword) }}
+		    {{ form_errors(form.plainPassword) }}
+		    {{ form_widget(form.plainPassword) }}
+		</div>
+
+		{{ form_rest(form) }}
+  
+  		{{ form_end(form) }}
+{% endblock %}

@@ -1,0 +1,7 @@
+parameters:
+#    efrei_readyo_music.example.class: Efrei\Readyo\MusicBundle\Example
+
+services:
+#    efrei_readyo_music.example:
+#        class: %efrei_readyo_music.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

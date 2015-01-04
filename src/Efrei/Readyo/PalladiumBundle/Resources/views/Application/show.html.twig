@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% set menu_item = 'palladium' %}
+
+
+{% block body %}
+	<h3>
+		<i class="fa fa-angle-right"></i> Applications
+		<div class="pull-right">
+			<a class="btn btn-theme03" href="{{ path('admin_palladium_application_new') }}">Nouvelle application</a>
+		</div>
+	</h3>
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}

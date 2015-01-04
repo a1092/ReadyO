@@ -1,0 +1,34 @@
+{% block subject %}Validation de votre compte{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+Bonjour {{ user.firstname }} !
+
+Nous avons bien créé votre compte.
+
+Pour pouvoir y accéder, merci de bien vouloir valider votre email : {{ confirmationUrl }}
+
+   > Email : {{ user.email }}
+   > Utilisateur : {{ user.username }}
+
+La team Ready'O !
+
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+
+Bonjour {{ user.firstname }} ! <br/>
+<br/>
+Nous avons bien créé votre compte.<br/>
+<br/>
+Pour pouvoir y accéder, merci de bien vouloir valider votre email : {{ confirmationUrl }}<br/>
+<br/>
+<ul>
+   <li>Email : {{ user.email }}</li>
+   <li>Utilisateur : {{ user.username }}</li>
+</ul>
+<br/>
+La team Ready'O.
+
+{% endblock %}

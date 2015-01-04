@@ -1,0 +1,70 @@
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        api_login:
+            pattern:  ^/api/login$
+            stateless: true
+            anonymous: true
+            form_login:
+                check_path:               api_user_login
+                provider:                 fos_userbundle
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
+                username_parameter: username
+                password_parameter: password
+
+        api_register:
+            pattern: ^/api/register
+            anonymous: true
+            stateless: true
+
+        api:
+            pattern:   ^/api
+            stateless: true
+            lexik_jwt:
+                authorization_header: # check token in Authorization Header
+                    enabled: true
+                    prefix:  Token
+                query_parameter:      # check token in query string parameter
+                    enabled: true
+                    name:    token
+                throw_exceptions: false     # When an authentication failure occurs, return a 401 response immediately
+                create_entry_point: true    # When no authentication details are provided, create a default entry point that returns a 401 response
+
+        admin:
+            pattern:            ^/admin
+            form_login:
+                provider:       fos_userbundle
+                login_path:     fos_user_security_login
+                check_path:     fos_user_security_check
+                csrf_provider:  form.csrf_provider
+                always_use_default_target_path : true
+                default_target_path: admin_user_dashboard
+            logout:
+                path:           fos_user_security_logout
+                target:         fos_user_security_login
+            anonymous:          true
+
+    access_control:
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/api/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+
+        - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: ROLE_ADMIN }
