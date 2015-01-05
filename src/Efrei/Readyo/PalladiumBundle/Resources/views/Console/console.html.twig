@@ -108,7 +108,7 @@
 		        </div>');
 		      }
 
-		      socket.onerror = function() { alert('Une erreur est survenue'); }
+		      socket.onerror = function(err) { alert("Error"); console.log(err); }
 
 		}
 
