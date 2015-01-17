@@ -47,6 +47,7 @@ class ShowApi1Controller extends FOSRestController
         $view->setSerializationContext(SerializationContext::create()
             ->setGroups(array('list'))
             ->setVersion($this->version)
+            ->setSerializeNull(true)
         );
         $view->setData($shows, 200);
 
@@ -88,6 +89,7 @@ class ShowApi1Controller extends FOSRestController
         $view->setSerializationContext(SerializationContext::create()
             ->setGroups(array('details'))
             ->setVersion($this->version)
+            ->setSerializeNull(true)
         );
         $view->setData($show, 200);
 
@@ -133,6 +135,7 @@ class ShowApi1Controller extends FOSRestController
         $view->setSerializationContext(SerializationContext::create()
             ->setGroups(array('list'))
             ->setVersion($this->version)
+            ->setSerializeNull(true)
         );
         $view->setData($schedules, 200);
 
@@ -173,6 +176,7 @@ class ShowApi1Controller extends FOSRestController
         $view->setSerializationContext(SerializationContext::create()
             ->setGroups(array('list'))
             ->setVersion($this->version)
+            ->setSerializeNull(true)
         );
         $view->setData($podcasts, 200);
 

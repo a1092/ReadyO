@@ -149,7 +149,7 @@ class Show
         if($this->pictureBig)
             return $this->pictureBig->getWebPath();
         else
-            return "aa";
+            return "";
     }
 
     /**
@@ -163,7 +163,7 @@ class Show
         if($this->pictureSmall)
             return $this->pictureSmall->getWebPath();
         else
-            return "aa";
+            return "";
     }
 
 
