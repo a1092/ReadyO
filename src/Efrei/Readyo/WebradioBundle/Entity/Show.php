@@ -103,7 +103,6 @@ class Show
      *
      * @ORM\OneToOne(targetEntity="Efrei\Readyo\WebradioBundle\Entity\Image", cascade={"persist"})
      *
-     * @Expose
      */
     private $pictureBig;
 
@@ -113,7 +112,6 @@ class Show
      *
      * @ORM\OneToOne(targetEntity="Efrei\Readyo\WebradioBundle\Entity\Image", cascade={"persist"})
      *
-     * @Expose
      */
     private $pictureSmall;
 
@@ -140,6 +138,34 @@ class Show
     private $isPublish;
 
     
+    /**
+     * @VirtualProperty
+     * @Type("string")
+     * @SerializedName("pictureBig")
+     * @Groups({"list", "details"})
+     * @Since("1.0")
+     */
+    public function pictureBig() {
+        if($this->pictureBig)
+            return $this->pictureBig->getWebPath();
+        else
+            return "aa";
+    }
+
+    /**
+     * @VirtualProperty
+     * @Type("string")
+     * @SerializedName("pictureSmall")
+     * @Groups({"list", "details"})
+     * @Since("1.0")
+     */
+    public function pictureSmall() {
+        if($this->pictureSmall)
+            return $this->pictureSmall->getWebPath();
+        else
+            return "aa";
+    }
+
 
     /**
      * Get id

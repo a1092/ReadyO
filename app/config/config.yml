@@ -100,6 +100,7 @@ fos_rest:
     view:
         jsonp_handler: ~
         view_response_listener: 'force'
+        serialize_null: true
         formats:
             xml:  true
             json: true
