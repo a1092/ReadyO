@@ -18,15 +18,26 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
 
 	private $applications;
     private $topics;
-	
+	protected $logger;
 
     private $_TOPICS = array(
         "register" => "fr/readyo/palladium/register",
-        "connected" => "fr/readyo/palladium/system/connected"
+        "connected" => "fr/readyo/palladium/system/connected",
+        "keepalive" => "fr/readyo/palladium/system/keepalive"
     );
 
 	public function __construct(EntityManager $em) {
     	$this->em = $em;
+
+        $this->logger = function($message, $level = 'info') {
+            echo "[".strtoupper($level)."]\t[".date("d/m/Y H:i:s")."]\t".$message."\n";
+        };
+
+
+        $this->setLogger(function($message, $level = 'info') {
+            echo "[".strtoupper($level)."]\t[".date("d/m/Y H:i:s")."]\t".$message."\n";
+        });
+
 
         $this->applications = array();
         $this->topics = array();
@@ -39,7 +50,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
     }
 
     public function onConnect($client) {
-    	
+
     }
 
 
@@ -49,7 +60,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
             
             $application = $this->applications[$client->getId()];
 
-            echo "[INFO] The application ".$application->getName()." was disconnected.\n";
+            $this->log("The application ".$application->getName()." was disconnected.");
 
             foreach($application->getTopics() as $topic) {
                 $this->topics[$topic->getPath()]->removeApplication($application);
@@ -84,6 +95,8 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
                 
                 $messages[] = $message;
 
+                $this->log("[".$message->getTopic()."]\t".json_encode($message->getData()), "INFO");
+
             } catch(AuthenticationException $e) {
                 
                 // Si ce n'est pas un message d'Authentification, on renvoie une erreur
@@ -99,7 +112,8 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
 
                 $this->applications[$client->getId()] = $application;
 
-                echo "[INFO] Authentication succeeded for ".$application->getName()."\n";
+                $this->log("Authentication succeeded for ".$application->getName());
+                
                 $messages[] = $message;
 
 
@@ -119,9 +133,10 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
             $this->em->flush();
 
         } catch(\Exception $e) {
-            echo "[ERROR] ".$e->getMessage();
+            $this->error($e->getMessage());
         }
     }
+
 
     private function broadcastSubscribers(\Efrei\Readyo\PalladiumBundle\Entity\Message $message) {
         
@@ -182,7 +197,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
         // On vérifie que l'application n'est pas déjà en cours d'utilisation
         foreach($this->applications as $appConnected) {
             if($appConnected->getId() == $application->getId())
-               throw new ApplicationException("Application already connected.");
+                throw new ApplicationException("Application already connected.");               
         }
 
         if($matchers)
@@ -197,7 +212,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
                         $application->addTopic($topic);
                         $this->topics[$topic->getPath()]->addApplication($application);
 
-                        echo "[INFO] Application ".$application->getName()." has subscribed to topic '".$topic->getPath()."'\n";
+                        $this->log("Application ".$application->getName()." has subscribed to topic '".$topic->getPath()."'", "INFO");
                     }
                 }
             }
@@ -223,5 +238,4 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
             $this->topics[$topic->getPath()] = $topic;
         }
     }
-
 }
