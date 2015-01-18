@@ -36,6 +36,13 @@ class Message
     private $data;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="reference", type="string", length=255, nullable=true)
+     */
+    private $reference;
+
+    /**
      * @var \Efrei\Readyo\PalladiumBundle\Entity\Application
      * 
      * @ORM\ManyToOne(targetEntity="Efrei\Readyo\PalladiumBundle\Entity\Application", inversedBy="messages")
@@ -57,6 +64,8 @@ class Message
     public function __construct() {
         $this->receivedAt = new \DateTime();
         $this->data = json_encode(array());
+
+        return $this;
     }
 
     
@@ -160,5 +169,28 @@ class Message
     public function getTopic()
     {
         return $this->topic;
+    }
+
+    /**
+     * Set reference
+     *
+     * @param string $reference
+     * @return Message
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return string 
+     */
+    public function getReference()
+    {
+        return $this->reference;
     }
 }

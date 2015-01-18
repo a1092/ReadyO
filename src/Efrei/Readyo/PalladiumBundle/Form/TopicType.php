@@ -18,7 +18,9 @@ class TopicType extends AbstractType
             ->add('path')
             ->add('description')
             ->add('format')
-            ->add('log')
+            ->add('log', "checkbox", array(
+                "required" => false
+            ))
         ;
     }
     

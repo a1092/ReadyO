@@ -7,6 +7,10 @@ services:
 #        arguments: [@service_id, "plain_value", %parameter%]
     palladium:
         class: Efrei\Readyo\PalladiumBundle\Application\PalladiumApplication
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@palladium.process"]
         tags:
             - { name: varspool_websocket.application, key: palladium }
+
+    palladium.process:
+        class: Efrei\Readyo\PalladiumBundle\Service\PalladiumProcess
+        arguments: ["@doctrine.orm.entity_manager", "@lexik_jwt_authentication.jwt_manager"]

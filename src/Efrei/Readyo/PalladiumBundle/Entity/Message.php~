@@ -36,6 +36,13 @@ class Message
     private $data;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="reference", type="string", length=255)
+     */
+    private $reference;
+
+    /**
      * @var \Efrei\Readyo\PalladiumBundle\Entity\Application
      * 
      * @ORM\ManyToOne(targetEntity="Efrei\Readyo\PalladiumBundle\Entity\Application", inversedBy="messages")
@@ -52,14 +59,6 @@ class Message
      *
      */
     private $topic;
-
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="origin", type="string", nullable=true)
-     */
-    private $origin;
 
 
     public function __construct() {

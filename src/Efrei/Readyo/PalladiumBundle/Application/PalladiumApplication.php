@@ -3,6 +3,7 @@
 namespace Efrei\Readyo\PalladiumBundle\Application;
 
 use Doctrine\ORM\EntityManager;
+use Efrei\Readyo\PalladiumBundle\Service\PalladiumProcess;
 
 use Efrei\Readyo\PalladiumBundle\Exception\AuthenticationException;
 use Efrei\Readyo\PalladiumBundle\Exception\TopicException;
@@ -26,8 +27,9 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
         "keepalive" => "fr/readyo/palladium/system/keepalive"
     );
 
-	public function __construct(EntityManager $em) {
+	public function __construct(EntityManager $em, PalladiumProcess $pp) {
     	$this->em = $em;
+        $this->pp = $pp;
 
         $this->logger = function($message, $level = 'info') {
             echo "[".strtoupper($level)."]\t[".date("d/m/Y H:i:s")."]\t".$message."\n";
@@ -83,16 +85,25 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
                 $incoming = $this->schemaValidation($incoming);
 
                 // Retrieve the topic
-                $message->setTopic($this->retrieveTopic($incoming["topic"]));
+                $message->setTopic($this->pp->retrieveTopic($incoming["topic"]));
 
                 // Retrieve the content
                 $message->setData(json_encode($incoming["data"]));
+
+                // Retrieve the reference
+                if(array_key_exists("reference", $incoming))
+                    $message->setReference($incoming["reference"]);
 
                 // Récupération de l'application qui envoie un message
                 $message->setApplication($this->retrieveApplication($client->getId()));
 
                 $this->broadcastSubscribers($message);
                 
+                foreach($this->pp->process($message) as $m) {
+                    $messages[] = $m;
+                    $this->broadcastSubscribers($m);
+                }
+
                 $messages[] = $message;
 
                 $this->log("[".$message->getTopic()."]\t".json_encode($message->getData()), "INFO");
@@ -145,6 +156,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
                 //if($application->getId() != $message->getApplication()->getId())
                     $application->getClient()->send(json_encode(array(
                         "time" => $message->getReceivedAt()->getTimestamp(),
+                        "reference" => $message->getReference(),
                         "from" => (empty($message->getApplication()) ? 'SYSTEM' : $message->getApplication()->getName()),
                         "topic" => $message->getTopic()->getPath(),
                         "data" => $message->getData()
@@ -169,20 +181,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
         return $data;
     }
 
-    private function retrieveTopic($path) {
-
-        if(!array_key_exists($path, $this->topics)) {
-        
-            $topic = $this->em->getRepository('EfreiReadyoPalladiumBundle:Topic')->findOneByPath($path); 
-
-            if(!$topic)
-                throw new TopicException($path);
-
-            $this->topics[$topic->getPath()] = $topic;
-        }
-
-        return $this->topics[$path];
-    }
+    
 
     private function registerApplication($privateKey, $matchers) {
         
