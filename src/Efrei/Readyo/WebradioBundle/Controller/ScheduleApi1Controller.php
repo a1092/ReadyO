@@ -12,9 +12,6 @@ use FOS\RestBundle\View\View;
 
 use JMS\Serializer\SerializationContext;
 
-/**
- * @Route("/api/v1/schedules")
- */
 class ScheduleApi1Controller extends FOSRestController
 {
 

@@ -12,7 +12,7 @@ api_v1_webradio_show_list:
 
 api_v1_webradio_show_details:
     type:     rest
-    path:     /shows/{$showId}
+    path:     /shows/{showId}
     defaults: { _controller: EfreiReadyoWebradioBundle:ShowApi1:show }
     requirements:
         _method:  GET
@@ -20,7 +20,7 @@ api_v1_webradio_show_details:
 
 api_v1_webradio_show_details_schedules:
     type:     rest
-    path:     /shows/{$showId}/schedules
+    path:     /shows/{showId}/schedules
     defaults: { _controller: EfreiReadyoWebradioBundle:ShowApi1:schedules }
     requirements:
         _method:  GET
@@ -28,7 +28,7 @@ api_v1_webradio_show_details_schedules:
 
 api_v1_webradio_show_details_podcasts:
     type:     rest
-    path:     /shows/{$showId}/podcasts
+    path:     /shows/{showId}/podcasts
     defaults: { _controller: EfreiReadyoWebradioBundle:ShowApi1:podcasts }
     requirements:
         _method:  GET
@@ -50,7 +50,7 @@ api_v1_webradio_schedule_list:
 
 api_v1_webradio_schedule_details:
     type:     rest
-    path:     /schedules/{$scheduleId}
+    path:     /schedules/{scheduleId}
     defaults: { _controller: EfreiReadyoWebradioBundle:ScheduleApi1:show }
     requirements:
         _method:  GET
@@ -59,7 +59,7 @@ api_v1_webradio_schedule_details:
 
 api_v1_webradio_schedule_details_podcasts:
     type:     rest
-    path:     /schedule/{$scheduleId}/podcasts
+    path:     /schedule/{scheduleId}/podcasts
     defaults: { _controller: EfreiReadyoWebradioBundle:ScheduleApi1:podcasts }
     requirements:
         _method:  GET
@@ -80,7 +80,7 @@ api_v1_webradio_podcast_list:
 
 api_v1_webradio_podcast_details:
     type:     rest
-    path:     /podcasts/{$podcastId}
+    path:     /podcasts/{podcastId}
     defaults: { _controller: EfreiReadyoWebradioBundle:PodcastApi1:show }
     requirements:
         _method:  GET
@@ -88,7 +88,7 @@ api_v1_webradio_podcast_details:
 
 api_v1_webradio_podcast_details_comments_list:
     type:     rest
-    path:     /podcasts/{$podcastId}/comments
+    path:     /podcasts/{podcastId}/comments
     defaults: { _controller: EfreiReadyoWebradioBundle:PodcastApi1:listComments }
     requirements:
         _method:  GET
@@ -96,7 +96,7 @@ api_v1_webradio_podcast_details_comments_list:
 
 api_v1_webradio_podcast_details_comments_add:
     type:     rest
-    path:     /podcasts/{$podcastId}/comments
+    path:     /podcasts/{podcastId}/comments
     defaults: { _controller: EfreiReadyoWebradioBundle:PodcastApi1:postComments }
     requirements:
         _method:  POST

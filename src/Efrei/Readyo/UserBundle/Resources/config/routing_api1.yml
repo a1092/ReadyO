@@ -1,6 +1,6 @@
 api_v1_user_profile:
     type:     rest
-    path:     /users/profile
+    path:     /users/me
     defaults: { _controller: EfreiReadyoUserBundle:UserApi1:profile }
     requirements:
         _method:  GET
