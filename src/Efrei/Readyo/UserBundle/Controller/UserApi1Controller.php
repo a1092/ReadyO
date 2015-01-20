@@ -145,6 +145,7 @@ class UserApi1Controller extends FOSRestController
         $view->setSerializationContext(SerializationContext::create()
             ->setGroups(array('details'))
             ->setVersion($this->version)
+            ->setSerializeNull(true)
         );
         $view->setData($user, 200);
 
@@ -185,6 +186,7 @@ class UserApi1Controller extends FOSRestController
             $view->setSerializationContext(SerializationContext::create()
                 ->setGroups(array('details'))
                 ->setVersion($this->version)
+                ->setSerializeNull(true)
             );
             $view->setData($user, 200);
 
@@ -236,6 +238,7 @@ class UserApi1Controller extends FOSRestController
             $view->setSerializationContext(SerializationContext::create()
                 ->setGroups(array('details'))
                 ->setVersion($this->version)
+                ->setSerializeNull(true)
             );
             $view->setData($picture, 200);
 
