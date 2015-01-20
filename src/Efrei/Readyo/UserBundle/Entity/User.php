@@ -148,7 +148,10 @@ class User extends BaseUser
      * @Since("1.0")
      */
     public function picture() {
-        return $this->picture->getWebPath();
+        if($this->picture)
+            return $this->picture->getWebPath();
+        else
+            return null;
     }
 
 
