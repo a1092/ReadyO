@@ -5,6 +5,13 @@ api_user_login:
     requirements:
         _method:  POST
 
+api_user_logout:
+    type:     rest
+    path:     /logout
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:logout }
+    requirements:
+        _method:  GET
+
 api_user_register:
     type:     rest
     path:     /register

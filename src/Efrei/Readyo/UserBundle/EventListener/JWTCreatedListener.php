@@ -47,7 +47,7 @@ class JWTCreatedListener
         $token->setPlateform($payload['plateform']);
 		$token->setUser($event->getUser());
 
-		$this->em->getRepository('EfreiReadyoUserBundle:AuthToken')->revoke($event->getUser(), $payload['ip'], $payload['plateform'], $expiredAt);
+		$this->em->getRepository('EfreiReadyoUserBundle:AuthToken')->revoke($event->getUser()->getId(), $payload['ip'], $payload['plateform'], $expiredAt);
 
 		$this->em->persist($token);
         $this->em->flush();

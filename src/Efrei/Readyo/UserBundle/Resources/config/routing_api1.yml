@@ -5,6 +5,7 @@ api_v1_user_profile:
     requirements:
         _method:  GET
 
+
 api_v1_user_edit:
     type:     rest
     path:     /users/edit

@@ -7,8 +7,10 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Util\Codes;
-use Symfony\Component\HttpFoundation\Request;
 
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserToken;
+use Symfony\Component\HttpFoundation\Request;
 
 use JMS\Serializer\SerializationContext;
 use FOS\UserBundle\FOSUserEvents;
@@ -24,6 +26,7 @@ use Efrei\Readyo\UserBundle\Form\UserForm;
 use Efrei\Readyo\UserBundle\Form\RegistrationForm;
 use Efrei\Readyo\UserBundle\Form\UserPictureType;
 
+use FOS\RestBundle\Request\ParamFetcher;
 
 
 
@@ -58,6 +61,8 @@ use JMS\Serializer\SerializationContext;
 class UserApi1Controller extends FOSRestController
 {
     private $version = "1.0";
+    
+
     /**
      * @ApiDoc(
      *   section = "User",
@@ -73,6 +78,48 @@ class UserApi1Controller extends FOSRestController
     public function loginAction()
     {
 
+    }
+
+
+    /**
+     * @ApiDoc(
+     *   section = "User",
+     *   ressource = true,
+     *   statusCodes = {
+     *      200="OK"
+     *   }
+     * )
+     *
+     * @Rest\QueryParam(name="token", nullable=false, description="User token")
+     *
+     * @Rest\View()
+     */
+    public function logoutAction(Request $request, ParamFetcher $paramFetcher) {
+
+
+        $jwtManager = $this->get('lexik_jwt_authentication.jwt_manager');
+        $jwtManager->setRequest($request);
+
+        $token = new JWTUserToken();
+        $token->setRawToken($paramFetcher->get("token"));
+
+        $payload = $jwtManager->decode($token);
+
+        // No token available
+        if(!$payload) {
+            return new JsonResponse(['message' => 'Bad token.'], 400);
+        }
+
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('EfreiReadyoUserBundle:User')->findOneByUsername($payload["username"]);
+
+        $expiredAt = new \Datetime();
+        $expiredAt->setTimestamp($payload['exp']);
+
+        $em->getRepository('EfreiReadyoUserBundle:AuthToken')->revoke($user, $payload['ip'], $payload['plateform'], $expiredAt);
+
+        return new JsonResponse([], 200);
     }
 
 
