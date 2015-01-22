@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\ServerBag;
 use Symfony\Component\HttpFoundation\HeaderBag;
 
+use Efrei\Readyo\PalladiumBundle\Exception\TopicException;
+
 class PalladiumProcess
 {
 	private $_em;
@@ -93,6 +95,7 @@ class PalladiumProcess
 
             if(!$topic)
                 throw new TopicException($path);
+            
         return $topic;
 /*
         if(!array_key_exists($path, $this->topics)) {
