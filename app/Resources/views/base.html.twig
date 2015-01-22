@@ -191,7 +191,7 @@
                    
                     <li class="dropdown">
                          <a href="#">
-                             <img src="{{ app.request.getBaseURL() }}/{{ app.security.getToken().getUser().getPicture().getWebPath }}" class="img-circle" width="40px" height="40px">
+                             {% if app.security.getToken().getUser().getPicture %}<img src="{{ app.request.getBaseURL() }}/{{ app.security.getToken().getUser().getPicture().getWebPath }}" class="img-circle" width="40px" height="40px"> {% endif %}
                             {{ app.security.getToken().getUser().getFirstname() }} {{ app.security.getToken().getUser().getLastname() }}
                         </a>
                        
