@@ -144,7 +144,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
             $this->em->flush();
 
         } catch(\Exception $e) {
-            $this->error($e->getMessage());
+            $this->log($e->getMessage(), "ERROR");
         }
     }
 
