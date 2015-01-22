@@ -43,7 +43,7 @@
 	
   	<script>
 		{% for show in shows %}
-			{% if show.pictureSmall is defined %}
+			{% if show.pictureSmall %}
         	$(".show-{{show.id}}").backstretch("{{ app.request.getBaseURL() }}/{{ show.pictureSmall.getWebPath() }}", {speed: 500});
         	{% endif %}
 		{% endfor %}
