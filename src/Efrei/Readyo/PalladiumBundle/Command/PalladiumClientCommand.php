@@ -65,7 +65,7 @@ class PalladiumClientCommand extends ContainerAwareCommand
 
                     $this->checkSchedule();
 
-                    sleep(30);
+                    sleep(60);
                 }
             } catch(\Exception $e) {
                 echo "[ERROR] ".$e->getMessage()."\n";
