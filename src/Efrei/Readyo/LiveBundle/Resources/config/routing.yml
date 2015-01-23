@@ -1,0 +1,3 @@
+efrei_readyo_live_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: EfreiReadyoLiveBundle:Default:index }

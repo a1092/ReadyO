@@ -30,6 +30,7 @@ class AppKernel extends Kernel
             new Efrei\Readyo\UserBundle\EfreiReadyoUserBundle(),
             new Efrei\Readyo\MusicBundle\EfreiReadyoMusicBundle(),
             new Efrei\Readyo\PalladiumBundle\EfreiReadyoPalladiumBundle(),
+            new Efrei\Readyo\LiveBundle\EfreiReadyoLiveBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
