@@ -127,7 +127,7 @@ class PalladiumProcess
 
 			$playlist = new MusicPlayed();
 			$playlist->setSchedule($schedules[0]);
-			$playlist->setMusic($this->currentMusic);
+			$playlist->setMusic($currentMusic);
 			$playlist->setPlayedAt(new \DateTime());
 
 			$this->_em->persist($playlist);
