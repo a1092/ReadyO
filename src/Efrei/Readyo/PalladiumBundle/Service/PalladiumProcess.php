@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\HeaderBag;
 
 use Efrei\Readyo\PalladiumBundle\Exception\TopicException;
 
+use Efrei\Readyo\MusicBundle\Entity\Music;
+use Efrei\Readyo\MusicBundle\Entity\MusicPlayed;
+
 class PalladiumProcess
 {
 	private $_em;
@@ -47,6 +50,17 @@ class PalladiumProcess
 					$messages[] = $this->generateMessage("fr/readyo/palladium/live/authenticate/fail", array(), $m->getReference());
 
 				break;
+
+			case "fr/readyo/palladium/music/playing":
+
+				if($m->getData()->playing == true && !empty($m->getData()->media))
+	    			$this->storeMusic(
+	    				$m->getData()->media->track->name, $m->getData()->media->track->spotify, 
+	    				$m->getData()->media->artist->name, $m->getData()->media->artist->spotify, 
+	    				$m->getData()->media->album->name, $m->getData()->media->album->spotify
+	    			);
+
+				break;
 		}
 
 		return $messages;
@@ -56,9 +70,6 @@ class PalladiumProcess
 		
 
 		$request = new Request();
-
-		//$query, $request, $attributes, $cookies, $files, $server, $content
-		//$request->initialize(array(), array(), array(), array(), array(), , "");
 
 		$request->request = new ParameterBag(array());
         $request->query = new ParameterBag(array());
@@ -89,13 +100,51 @@ class PalladiumProcess
 		return $message;
 	}
 
+	public function storeMusic($track_name, $track_spotify, $artist_name, $artist_spotify, $album_name, $album_spotify) {
+
+		$currentMusic = $this->_em->getRepository('EfreiReadyoMusicBundle:Music')
+									->findOneBy(array("trackSpotify" => $track_spotify));
+
+		if(!$currentMusic) {
+			$currentMusic = new Music();
+
+			$currentMusic->setTrackName($track_name);
+			$currentMusic->setTrackSpotify($track_spotify);
+
+			$currentMusic->setArtistName($artist_name);
+			$currentMusic->setArtistSpotify($artist_spotify);
+
+			$currentMusic->setAlbumName($album_name);
+			$currentMusic->setAlbumSpotify($album_spotify);
+
+			$this->_em->persist($currentMusic);
+		}
+
+
+		$schedules = $this->_em->getRepository('EfreiReadyoWebradioBundle:Schedule')->inDiffusion(1, 1);
+
+		if(count($schedules) > 0) {
+
+			$playlist = new MusicPlayed();
+			$playlist->setSchedule($schedules[0]);
+			$playlist->setMusic($this->currentMusic);
+			$playlist->setPlayedAt(new \DateTime());
+
+			$this->_em->persist($playlist);
+			
+		}
+
+		$this->_em->flush();
+
+	}
+
 	public function retrieveTopic($path) {
 
 		$topic = $this->_em->getRepository('EfreiReadyoPalladiumBundle:Topic')->findOneByPath($path); 
 
             if(!$topic)
                 throw new TopicException($path);
-            
+
         return $topic;
 /*
         if(!array_key_exists($path, $this->topics)) {
