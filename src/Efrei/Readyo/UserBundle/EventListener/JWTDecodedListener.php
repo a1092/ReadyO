@@ -32,11 +32,11 @@ class JWTDecodedListener
         $payload = $event->getPayload();
         $request = $event->getRequest();
 	
-
+/*
         if (!isset($payload['ip']) || $payload['ip'] !== $request->getClientIp()) {
             $event->markAsInvalid();
         }
-
+*/
         if (!isset($payload['plateform']) || $payload['plateform'] !== $request->headers->get('User-Agent')) {
             $event->markAsInvalid();
         }
