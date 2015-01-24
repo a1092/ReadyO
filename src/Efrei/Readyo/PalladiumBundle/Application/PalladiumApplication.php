@@ -12,7 +12,7 @@ use Efrei\Readyo\PalladiumBundle\Exception\ApplicationException;
 
 use Efrei\Readyo\PalladiumBundle\Entity\Application;
 use Efrei\Readyo\PalladiumBundle\Entity\Topic;
-use Efrei\Readyo\PalladiumBundle\Entity\Message;
+use Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage;
 
 class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Application
 {
@@ -76,7 +76,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
         
         $messages = array();
 
-        $message = new Message();
+        $message = new PalladiumMessage();
 
         try {
             try {
@@ -128,7 +128,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
                 $messages[] = $message;
 
 
-                $authMessage = new Message();
+                $authMessage = new PalladiumMessage();
                 $authMessage->setApplication($application);
                 $authMessage->setTopic($this->topics[$this->_TOPICS["connected"]]);
                 $this->broadcastSubscribers($authMessage);
@@ -149,7 +149,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
     }
 
 
-    private function broadcastSubscribers(\Efrei\Readyo\PalladiumBundle\Entity\Message $message) {
+    private function broadcastSubscribers(\Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage $message) {
         
         if(count($message->getTopic()->getApplications())) {
             foreach($message->getTopic()->getApplications() as $application) {

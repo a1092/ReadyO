@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("PalladiumMessage")
  * @ORM\Entity(repositoryClass="Efrei\Readyo\PalladiumBundle\Entity\MessageRepository")
  */
-class Message
+class PalladiumMessage
 {
     /**
      * @var integer

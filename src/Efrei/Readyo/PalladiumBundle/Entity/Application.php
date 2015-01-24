@@ -51,9 +51,9 @@ class Application
     private $active;
 
     /**
-     * @var \Efrei\Readyo\PalladiumBundle\Entity\Message
+     * @var \Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage
      * 
-     * @ORM\OneToMany(targetEntity="Efrei\Readyo\PalladiumBundle\Entity\Message", mappedBy="application")
+     * @ORM\OneToMany(targetEntity="Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage", mappedBy="application")
      *
      */
     private $messages;
@@ -241,10 +241,10 @@ class Application
     /**
      * Add messages
      *
-     * @param \Efrei\Readyo\PalladiumBundle\Entity\Message $messages
+     * @param \Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage $messages
      * @return Application
      */
-    public function addMessage(\Efrei\Readyo\PalladiumBundle\Entity\Message $messages)
+    public function addMessage(\Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage $messages)
     {
         $this->messages[] = $messages;
 
@@ -254,9 +254,9 @@ class Application
     /**
      * Remove messages
      *
-     * @param \Efrei\Readyo\PalladiumBundle\Entity\Message $messages
+     * @param \Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage $messages
      */
-    public function removeMessage(\Efrei\Readyo\PalladiumBundle\Entity\Message $messages)
+    public function removeMessage(\Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage $messages)
     {
         $this->messages->removeElement($messages);
     }

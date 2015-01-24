@@ -13,4 +13,4 @@ services:
 
     palladium.process:
         class: Efrei\Readyo\PalladiumBundle\Service\PalladiumProcess
-        arguments: ["@doctrine.orm.entity_manager", "@lexik_jwt_authentication.jwt_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@lexik_jwt_authentication.jwt_manager", "@jms_serializer"]

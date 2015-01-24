@@ -43,9 +43,9 @@ class Topic
     private $format;
 
     /**
-     * @var \Efrei\Readyo\PalladiumBundle\Entity\Message
+     * @var \Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage
      * 
-     * @ORM\OneToMany(targetEntity="Efrei\Readyo\PalladiumBundle\Entity\Message", mappedBy="topic")
+     * @ORM\OneToMany(targetEntity="Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage", mappedBy="topic")
      *
      */
     private $messages;
@@ -182,10 +182,10 @@ class Topic
     /**
      * Add messages
      *
-     * @param \Efrei\Readyo\PalladiumBundle\Entity\Message $messages
+     * @param \Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage $messages
      * @return Topic
      */
-    public function addMessage(\Efrei\Readyo\PalladiumBundle\Entity\Message $messages)
+    public function addMessage(\Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage $messages)
     {
         $this->messages[] = $messages;
 
@@ -195,9 +195,9 @@ class Topic
     /**
      * Remove messages
      *
-     * @param \Efrei\Readyo\PalladiumBundle\Entity\Message $messages
+     * @param \Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage $messages
      */
-    public function removeMessage(\Efrei\Readyo\PalladiumBundle\Entity\Message $messages)
+    public function removeMessage(\Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage $messages)
     {
         $this->messages->removeElement($messages);
     }

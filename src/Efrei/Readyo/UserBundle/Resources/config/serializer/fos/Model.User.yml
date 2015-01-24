@@ -3,10 +3,10 @@ FOS\UserBundle\Model\User:
   properties:
     id:
       expose: true
-      groups: [list, details]
+      groups: [list, details, live]
     username:
       expose: true
-      groups: [list, details]
+      groups: [list, details, live]
     email:
       expose: true
       groups: [list, details]

@@ -3,7 +3,7 @@
 namespace Efrei\Readyo\PalladiumBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use Efrei\Readyo\PalladiumBundle\Entity\Message;
+use Efrei\Readyo\PalladiumBundle\Entity\PalladiumMessage;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserToken;
@@ -17,19 +17,25 @@ use Efrei\Readyo\PalladiumBundle\Exception\TopicException;
 
 use Efrei\Readyo\MusicBundle\Entity\Music;
 use Efrei\Readyo\MusicBundle\Entity\MusicPlayed;
+use Efrei\Readyo\LiveBundle\Entity\LiveMessage;
+
+use JMS\Serializer\Serializer;
+use JMS\Serializer\SerializationContext;
 
 class PalladiumProcess
 {
 	private $_em;
 	private $_jwtManager;
+	private $_serializer;
 
-	public function __construct(EntityManager $em, JWTManager $jwtManager) {
+	public function __construct(EntityManager $em, JWTManager $jwtManager, Serializer $serializer) {
 		$this->_em = $em;
 		$this->_jwtManager = $jwtManager;
+		$this->_serializer = $serializer;
 
 	}
 
-	public function process(Message $m)	{
+	public function process(PalladiumMessage $m)	{
 		$messages = array();
 
 		switch($m->getTopic()) {
@@ -39,15 +45,15 @@ class PalladiumProcess
 				$user = $this->checkCredentials($m->getData()->token, $m->getData()->userAgent, $m->getData()->ip);
 
 				if($user != null)
-					$messages[] = $this->generateMessage("fr/readyo/palladium/live/authenticate/success", array(
+					$messages[] = $this->generateMessage("fr/readyo/palladium/live/authenticate/success", json_encode(array(
 						"userid" => $user->getId(),
 						"username" => $user->getUsername(),
 						"firstname" => $user->getFirstname(),
 						"lastname" => $user->getLastname(),
 						"picture" => $user->picture(),
-					), $m->getReference());
+					)), $m->getReference());
 				else
-					$messages[] = $this->generateMessage("fr/readyo/palladium/live/authenticate/fail", array(), $m->getReference());
+					$messages[] = $this->generateMessage("fr/readyo/palladium/live/authenticate/fail", json_encode(array()), $m->getReference());
 
 				break;
 
@@ -59,6 +65,22 @@ class PalladiumProcess
 	    				$m->getData()->media->artist->name, $m->getData()->media->artist->spotify, 
 	    				$m->getData()->media->album->name, $m->getData()->media->album->spotify
 	    			);
+
+				break;
+
+			case "fr/readyo/palladium/live/message/emit":
+
+	    			$liveMessage = $this->storeLiveMessage($m->getData()->userid, $m->getData()->message);
+
+	    			if($liveMessage)
+		    			$messages[] = $this->generateMessage("fr/readyo/palladium/live/message/receive", $this->_serializer->serialize(
+	    					$liveMessage,
+	    					'json', 
+	    					SerializationContext::create()
+	    						->setGroups(array('live'))
+	            				->setVersion("1.0")
+	            				->setSerializeNull(true)
+	            		), $m->getReference());
 
 				break;
 		}
@@ -92,13 +114,38 @@ class PalladiumProcess
 
 	private function generateMessage($topic, $data, $reference=null) {
 		
-		$message =  new Message();
+		$message =  new PalladiumMessage();
 		$message->setTopic($this->retrieveTopic($topic));
-		$message->setData(json_encode($data));
+		$message->setData($data);
 		$message->setReference($reference);
 
 		return $message;
 	}
+
+	public function storeLiveMessage($userid, $text) {
+
+		$user = $this->_em->getRepository('EfreiReadyoUserBundle:User')->findOneById($userid);
+		$schedules = $this->_em->getRepository('EfreiReadyoWebradioBundle:Schedule')->inDiffusion(10, 10);
+
+		if(count($schedules) > 0) {
+
+
+			$message = new LiveMessage();
+
+			$message->setText($text);
+			$message->setUser($user);
+			$message->setSchedule($schedules[0]);
+
+			$this->_em->persist($message);
+			$this->_em->flush();
+
+			return $message;
+		}
+
+		return null;
+	}
+
+
 
 	public function storeMusic($track_name, $track_spotify, $artist_name, $artist_spotify, $album_name, $album_spotify) {
 
