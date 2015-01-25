@@ -18,3 +18,31 @@ api_user_register:
     defaults: { _controller: EfreiReadyoUserBundle:UserApi1:register }
     requirements:
         _method:  POST
+
+api_user_register_confirm:
+    type:     rest
+    path:     /register/confirm/{token}
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:registerConfirm }
+    requirements:
+        _method:  GET
+
+fos_user_resetting_request:
+    type:     rest
+    path:     /reset
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:register }
+    requirements:
+        _method:  POST
+
+api_user_password_request:
+    type:     rest
+    path:     /password/request
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:passwordRequest }
+    requirements:
+        _method:  POST
+
+api_user_password_reset:
+    type:     rest
+    path:     /password/reset/{token}
+    defaults: { _controller: EfreiReadyoUserBundle:UserApi1:passwordReset }
+    requirements:
+        _method:  POST
