@@ -20,6 +20,7 @@ class PalladiumClientCommand extends ContainerAwareCommand
     private $_serializer = null;
 
     private $time2reconnect = 0;
+    private $starting = true;
 
 	protected function configure() {
         
@@ -109,7 +110,7 @@ class PalladiumClientCommand extends ContainerAwareCommand
 
             echo "[INFO] ".count($schedules)." programme(s) trouvé(s). \n";
 
-            if($schedules[0]->getDiffusedAt()->format('Y-m-d H:i') == (new \Datetime())->format('Y-m-d H:i')) {
+            if($this->starting || $schedules[0]->getDiffusedAt()->format('Y-m-d H:i') == (new \Datetime())->format('Y-m-d H:i')) {
             
                 $this->_client->sendData(json_encode(array(
                     "topic" => "fr/readyo/palladium/webradio/schedule/begining",
@@ -140,7 +141,7 @@ class PalladiumClientCommand extends ContainerAwareCommand
                     }
                 }
 
-            } else if($schedules[0]->getFinishedAt()->format('Y-m-d H:i') == (new \Datetime())->format('Y-m-d H:i')) {
+            } else if($this->starting || $schedules[0]->getFinishedAt()->format('Y-m-d H:i') == (new \Datetime())->format('Y-m-d H:i')) {
 
                 $this->_client->sendData(json_encode(array(
                     "topic" => "fr/readyo/palladium/webradio/schedule/ending",
