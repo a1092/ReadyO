@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class ScheduleRepository extends EntityRepository
 {
-	public function filter($showId, $begin, $end, $finished, $live, $limit, $offset, $isPublish=true) {
+	public function filter($showId, $begin, $end, $finished, $live, $limit, $offset, $order="ASC", $isPublish=true ) {
 		
 		$qb = $this->createQueryBuilder('schedule');
 
@@ -58,7 +58,7 @@ class ScheduleRepository extends EntityRepository
 
 
 		$qb
-			->orderBy('schedule.diffusedAt', 'ASC')
+			->orderBy('schedule.diffusedAt', $order)
 			->setFirstResult( $offset )
    			->setMaxResults( $limit );
 		;

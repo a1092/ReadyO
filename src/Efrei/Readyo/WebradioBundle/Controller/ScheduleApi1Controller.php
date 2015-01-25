@@ -33,6 +33,7 @@ class ScheduleApi1Controller extends FOSRestController
      * @Rest\QueryParam(name="end", requirements="(\d{4})-(\d{2})-(\d{2})T(\d{2})\:(\d{2})\:(\d{2})[+-](\d{2})\:(\d{2})", nullable=true, description="L'émission débute avant cette date. Date au format ISO-8601.")
      * @Rest\QueryParam(name="finished", requirements="(0|1)", nullable=true, description="Emissions terminées ?")
      * @Rest\QueryParam(name="live", requirements="(0|1)", nullable=true, description="Emissions en direct ?")
+     * @Rest\QueryParam(name="order", requirements="(ASC|DESC)", default="ASC", nullable=true, description="Ordre de diffusion des programmes")
      *
      */
     public function listAction(ParamFetcher $paramFetcher)
@@ -49,7 +50,8 @@ class ScheduleApi1Controller extends FOSRestController
             $paramFetcher->get("finished"),
             $paramFetcher->get("live"),
             $paramFetcher->get("limit"), 
-            $paramFetcher->get("offset")
+            $paramFetcher->get("offset"),
+            $paramFetcher->get("order")
         );
         
         $view = $this->view();
