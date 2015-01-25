@@ -96,6 +96,7 @@ class ScheduleApi1Controller extends FOSRestController
             $view->setSerializationContext(SerializationContext::create()
                 ->setGroups(array('details'))
                 ->setVersion($this->version)
+                ->enableMaxDepthChecks()
             );
             $view->setData($schedule, 200);
         }

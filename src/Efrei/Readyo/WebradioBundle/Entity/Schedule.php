@@ -12,6 +12,8 @@ use JMS\Serializer\Annotation\Since;
 use JMS\Serializer\Annotation\VirtualProperty;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\MaxDepth;
+
 
 /**
  * Schedule
@@ -66,6 +68,10 @@ class Schedule
      * @ORM\ManyToOne(targetEntity="Efrei\Readyo\WebradioBundle\Entity\Show", inversedBy="schedules")
      * @ORM\JoinColumn(nullable=false)
      *
+     * @Expose
+     * @Groups({"list", "details"})
+     * @MaxDepth(1)
+     * @Since("1.0")
      */
     private $show;
 
