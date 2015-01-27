@@ -12,11 +12,16 @@ use JMS\Serializer\Annotation\VirtualProperty;
 use JMS\Serializer\Annotation\SerializedName;
 use JMS\Serializer\Annotation\Type;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+
 /**
- * Show2
+ * Show
  *
  * @ORM\Table("Emission")
  * @ORM\Entity(repositoryClass="Efrei\Readyo\WebradioBundle\Entity\ShowRepository")
+ * @ORM\HasLifecycleCallbacks()
  * 
  * @ExclusionPolicy("all") 
  */
@@ -98,22 +103,35 @@ class Show
     private $type;
 
 
+
     /**
-     * @var array
-     *
-     * @ORM\OneToOne(targetEntity="Efrei\Readyo\WebradioBundle\Entity\Image", cascade={"persist"})
-     *
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $pictureBig;
+    private $bigPicturePath;
+
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    public $bigPictureFile;
 
 
     /**
-     * @var array
-     *
-     * @ORM\OneToOne(targetEntity="Efrei\Readyo\WebradioBundle\Entity\Image", cascade={"persist"})
-     *
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $pictureSmall;
+    private $smallPicturePath;
+
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    public $smallPictureFile;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="modifiedTime", type="datetime", nullable=true)
+     */
+    private $modifiedTime;
 
 
 
@@ -136,35 +154,6 @@ class Show
      * @ORM\Column(name="isPublish", type="boolean")
      */
     private $isPublish;
-
-    
-    /**
-     * @VirtualProperty
-     * @Type("string")
-     * @SerializedName("pictureBig")
-     * @Groups({"list", "details"})
-     * @Since("1.0")
-     */
-    public function pictureBig() {
-        if($this->pictureBig)
-            return $this->pictureBig->getWebPath();
-        else
-            return "";
-    }
-
-    /**
-     * @VirtualProperty
-     * @Type("string")
-     * @SerializedName("pictureSmall")
-     * @Groups({"list", "details"})
-     * @Since("1.0")
-     */
-    public function pictureSmall() {
-        if($this->pictureSmall)
-            return $this->pictureSmall->getWebPath();
-        else
-            return "";
-    }
 
 
     /**
@@ -300,51 +289,6 @@ class Show
         return $this->isPublish;
     }
 
-    /**
-     * Set pictureBig
-     *
-     * @param \Efrei\Readyo\WebradioBundle\Entity\Image $pictureBig
-     * @return Show
-     */
-    public function setPictureBig(\Efrei\Readyo\WebradioBundle\Entity\Image $pictureBig = null)
-    {
-        $this->pictureBig = $pictureBig;
-
-        return $this;
-    }
-
-    /**
-     * Get pictureBig
-     *
-     * @return \Efrei\Readyo\WebradioBundle\Entity\Image 
-     */
-    public function getPictureBig()
-    {
-        return $this->pictureBig;
-    }
-
-    /**
-     * Set pictureSmall
-     *
-     * @param \Efrei\Readyo\WebradioBundle\Entity\Image $pictureSmall
-     * @return Show
-     */
-    public function setPictureSmall(\Efrei\Readyo\WebradioBundle\Entity\Image $pictureSmall = null)
-    {
-        $this->pictureSmall = $pictureSmall;
-
-        return $this;
-    }
-
-    /**
-     * Get pictureSmall
-     *
-     * @return \Efrei\Readyo\WebradioBundle\Entity\Image 
-     */
-    public function getPictureSmall()
-    {
-        return $this->pictureSmall;
-    }
 
     /**
      * Add schedules
@@ -405,5 +349,180 @@ class Show
     public function getType()
     {
         return $this->type;
+    }
+
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+
+        if ($this->smallPictureFile !== null) {
+            $this->removePicture($this->getSmallPictureAbsolutePath());
+            $this->smallPicturePath = sha1(uniqid(mt_rand(), true)).'.'.$this->smallPictureFile->guessExtension();
+        }
+
+        if ($this->bigPictureFile !== null) {
+            $this->removePicture($this->getBigPictureAbsolutePath());
+            $this->bigPicturePath = sha1(uniqid(mt_rand(), true)).'.'.$this->bigPictureFile->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+
+        if ($this->smallPictureFile !== null) {
+            $this->smallPictureFile->move($this->getUploadRootDir(), $this->smallPicturePath);
+            unset($this->smallPictureFile);
+        }
+
+        if ($this->bigPictureFile !== null) {
+            $this->bigPictureFile->move($this->getUploadRootDir(), $this->bigPicturePath);
+            unset($this->bigPictureFile);
+        }
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        $this->removePicture($this->getSmallPictureAbsolutePath());
+        $this->removePicture($this->getBigPictureAbsolutePath());
+    }
+
+
+    private function removePicture($file) {
+
+        if(!empty($file))
+            unlink($file);
+    }
+
+
+    
+    public function getSmallPictureAbsolutePath()
+    {
+        return null === $this->smallPicturePath ? null : $this->getUploadRootDir().'/'.$this->smallPicturePath;
+    }
+
+    /**
+     * @VirtualProperty
+     * @Type("string")
+     * @SerializedName("picture_lg")
+     * @Groups({"list", "details"})
+     */
+    public function getSmallPictureWebPath()
+    {
+        return null === $this->smallPicturePath ? null : $this->getUploadDir().'/'.$this->smallPicturePath;
+    }
+
+    public function getBigPictureAbsolutePath()
+    {
+        return null === $this->bigPicturePath ? null : $this->getUploadRootDir().'/'.$this->bigPicturePath;
+    }
+
+    /**
+     * @VirtualProperty
+     * @Type("string")
+     * @SerializedName("picture_sm")
+     * @Groups({"list", "details"})
+     */
+    public function getBigPictureWebPath()
+    {
+        return null === $this->bigPicturePath ? null : $this->getUploadDir().'/'.$this->bigPicturePath;
+    }
+
+
+
+
+
+
+    protected function getUploadRootDir()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
+        // le document/image dans la vue.
+        return 'data/images';
+    }
+
+
+    /**
+     * Set bigPicturePath
+     *
+     * @param string $bigPicturePath
+     * @return Show
+     */
+    public function setBigPicturePath($bigPicturePath)
+    {
+        $this->bigPicturePath = $bigPicturePath;
+
+        return $this;
+    }
+
+    /**
+     * Get bigPicturePath
+     *
+     * @return string 
+     */
+    public function getBigPicturePath()
+    {
+        return $this->bigPicturePath;
+    }
+
+    /**
+     * Set smallPicturePath
+     *
+     * @param string $smallPicturePath
+     * @return Show
+     */
+    public function setSmallPicturePath($smallPicturePath)
+    {
+        $this->smallPicturePath = $smallPicturePath;
+
+        return $this;
+    }
+
+    /**
+     * Get smallPicturePath
+     *
+     * @return string 
+     */
+    public function getSmallPicturePath()
+    {
+        return $this->smallPicturePath;
+    }
+
+    /**
+     * Set modifiedTime
+     *
+     * @param \DateTime $modifiedTime
+     * @return Show
+     */
+    public function setModifiedTime($modifiedTime)
+    {
+        $this->modifiedTime = $modifiedTime;
+
+        return $this;
+    }
+
+    /**
+     * Get modifiedTime
+     *
+     * @return \DateTime 
+     */
+    public function getModifiedTime()
+    {
+        return $this->modifiedTime;
     }
 }

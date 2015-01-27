@@ -37,6 +37,8 @@ class ShowController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+
+            $show->setModifiedTime(new \DateTime());
             $em->persist($show);
             $em->flush();
 
@@ -66,7 +68,7 @@ class ShowController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) { 
-
+            $show->setModifiedTime(new \DateTime());
             $em->persist($show);
             $em->flush();
 

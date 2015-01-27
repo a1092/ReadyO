@@ -13,7 +13,7 @@ class ShowForm extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
+        
     	$builder
                 ->add('title', 'text', array('required' => true))
                 ->add('shortTitle', 'text', array('required' => true))
@@ -32,8 +32,12 @@ class ShowForm extends AbstractType
                         'NONE' => 'Hors catégorie',
                     )
                 ))
-                ->add('pictureBig', new ImageType())
-                ->add('pictureSmall', new ImageType())
+                ->add('bigPictureFile', "file", array(
+                    'required' => false
+                ))
+                ->add('smallPictureFile', "file", array(
+                    'required' => false
+                ))
                 ->add('isPublish', 'checkbox', array('required' => false))
                 
             ;        
