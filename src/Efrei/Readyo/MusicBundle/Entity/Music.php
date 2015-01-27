@@ -4,11 +4,22 @@ namespace Efrei\Readyo\MusicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Since;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\MaxDepth;
+
 /**
  * Music
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Efrei\Readyo\MusicBundle\Entity\MusicRepository")
+ * 
+ * @ExclusionPolicy("all") 
  */
 class Music
 {
@@ -25,6 +36,10 @@ class Music
      * @var string
      *
      * @ORM\Column(name="trackName", type="string", length=255)
+     *
+     * @Expose
+     * @Groups({"details"})
+     * @Since("1.0")
      */
     private $trackName;
 
@@ -32,6 +47,10 @@ class Music
      * @var string
      *
      * @ORM\Column(name="trackSpotify", type="string", length=150)
+     *
+     * @Expose
+     * @Groups({"details"})
+     * @Since("1.0")
      */
     private $trackSpotify;
 
@@ -39,6 +58,10 @@ class Music
      * @var string
      *
      * @ORM\Column(name="artistName", type="string", length=255)
+     *
+     * @Expose
+     * @Groups({"details"})
+     * @Since("1.0")
      */
     private $artistName;
 
@@ -46,6 +69,10 @@ class Music
      * @var string
      *
      * @ORM\Column(name="artistSpotify", type="string", length=255)
+     *
+     * @Expose
+     * @Groups({"details"})
+     * @Since("1.0")
      */
     private $artistSpotify;
 
@@ -53,6 +80,10 @@ class Music
      * @var string
      *
      * @ORM\Column(name="albumName", type="string", length=255)
+     *
+     * @Expose
+     * @Groups({"details"})
+     * @Since("1.0")
      */
     private $albumName;
 
@@ -60,6 +91,10 @@ class Music
      * @var string
      *
      * @ORM\Column(name="albumSpotify", type="string", length=255)
+     *
+     * @Expose
+     * @Groups({"details"})
+     * @Since("1.0")
      */
     private $albumSpotify;
 

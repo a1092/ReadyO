@@ -4,11 +4,22 @@ namespace Efrei\Readyo\MusicBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\Since;
+use JMS\Serializer\Annotation\VirtualProperty;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\Type;
+use JMS\Serializer\Annotation\MaxDepth;
+
 /**
  * MusicPlayed
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Efrei\Readyo\MusicBundle\Entity\MusicPlayedRepository")
+ * 
+ * @ExclusionPolicy("all") 
  */
 class MusicPlayed
 {
@@ -34,6 +45,10 @@ class MusicPlayed
      * 
      * @ORM\ManyToOne(targetEntity="Efrei\Readyo\WebradioBundle\Entity\Schedule", inversedBy="playlist")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Expose
+     * @Groups({"details"})
+     * @Since("1.0")
      */
     private $schedule;
 
@@ -42,6 +57,10 @@ class MusicPlayed
      * 
      * @ORM\ManyToOne(targetEntity="Efrei\Readyo\MusicBundle\Entity\Music", inversedBy="playlist")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Expose
+     * @Groups({"details"})
+     * @Since("1.0")
      */
     private $music;
 
