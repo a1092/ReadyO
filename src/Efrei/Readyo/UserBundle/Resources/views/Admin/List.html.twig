@@ -100,7 +100,9 @@
 	
   	<script>
 		{% for user in users %}
-        	$(".user-{{user.id}}").backstretch("{{ app.request.getBaseURL() }}/{{ user.picture }}", {speed: 500});
+			{% if user.getPictureWebPath %}
+        	$(".user-{{user.id}}").backstretch("{{ app.request.getBaseURL() }}/{{ user.getPictureWebPath }}", {speed: 500});
+        	{% endif %}
 		{% endfor %}
     </script>
 {% endblock %}

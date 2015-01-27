@@ -22,12 +22,10 @@ use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Efrei\Readyo\UserBundle\Entity\User;
-use Efrei\Readyo\UserBundle\Entity\UserPicture;
 
 use Efrei\Readyo\UserBundle\Form\UserForm;
 use Efrei\Readyo\UserBundle\Form\RegistrationForm;
 use Efrei\Readyo\UserBundle\Form\ResettingFormType;
-use Efrei\Readyo\UserBundle\Form\UserPictureType;
 
 use FOS\RestBundle\Request\ParamFetcher;
 
@@ -272,6 +270,9 @@ class UserApi1Controller extends FOSRestController
         if ($form->isValid()) {
             
             $em = $this->getDoctrine()->getManager();
+            
+            $user->setModifiedTime(new \DateTime());
+
             $em->persist($user);
             $em->flush();
 
@@ -291,57 +292,6 @@ class UserApi1Controller extends FOSRestController
         return $this->get('fos_rest.view_handler')->handle($view);     
     }
 
-
-
-    /**
-     * @ApiDoc(
-     *   section = "User",
-     *   input = "Efrei\Readyo\UserBundle\Form\UserPictureType",
-     *   ressource = false,
-     *   statusCodes = {
-     *      200="OK"
-     *   }
-     * )
-     *
-     * @Rest\View()
-     */
-    public function editPictureAction(Request $request)
-    {
-       
-        $picture = new UserPicture();
-
-        $form = $this->createForm(new UserPictureType(), $picture, array(
-            'csrf_protection' => false
-        ));
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            
-            $em = $this->getDoctrine()->getManager();
-
-            $em->persist($picture);
-
-            $user = $this->get('security.context')->getToken()->getUser();
-            $user->setPicture($picture);
-
-            $em->persist($user);
-            $em->flush();
-
-            $view = $this->view();
-            $view->setSerializationContext(SerializationContext::create()
-                ->setGroups(array('details'))
-                ->setVersion($this->version)
-                ->setSerializeNull(true)
-            );
-            $view->setData($picture, 200);
-
-        } else {
-            
-            $view = View::create($form, 400);
-        }
-
-        return $this->get('fos_rest.view_handler')->handle($view);     
-    }
 
 
     /**

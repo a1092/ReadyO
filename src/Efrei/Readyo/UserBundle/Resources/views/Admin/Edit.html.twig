@@ -6,22 +6,12 @@
 {% block body %}
 	{{ form_start(form) }}
 		<h3>
-			<i class="fa fa-angle-right"></i> Enregistrement d'un utilisateur
+			<i class="fa fa-angle-right"></i> Modification d'un utilisateur
 			<div class="pull-right">
 				<button class="btn btn-theme03" type="submit">Enregistrer</button>
 			</div>
 		</h3>
 
-		<div>
-		    {{ form_label(form.email) }}
-		    {{ form_errors(form.email) }}
-		    {{ form_widget(form.email) }}
-		</div>
-		<div>
-		    {{ form_label(form.username) }}
-		    {{ form_errors(form.username) }}
-		    {{ form_widget(form.username) }}
-		</div>
 		<div>
 		    {{ form_label(form.firstname) }}
 		    {{ form_errors(form.firstname) }}
@@ -46,11 +36,6 @@
 		    {{ form_label(form.pictureFile) }}
 		    {{ form_errors(form.pictureFile) }}
 		    {{ form_widget(form.pictureFile) }}
-		</div>
-		<div>
-		    {{ form_label(form.plainPassword) }}
-		    {{ form_errors(form.plainPassword) }}
-		    {{ form_widget(form.plainPassword) }}
 		</div>
 
 		{{ form_rest(form) }}

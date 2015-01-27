@@ -6,6 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use FOS\UserBundle\Model\User as BaseUser;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 use JMS\Serializer\Annotation\ExclusionPolicy;
 use JMS\Serializer\Annotation\Expose;
 use JMS\Serializer\Annotation\Groups;
@@ -19,6 +22,7 @@ use JMS\Serializer\Annotation\Type;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Efrei\Readyo\UserBundle\Entity\UserRepository")
+ * @ORM\HasLifecycleCallbacks()
  *
  * @ExclusionPolicy("all") 
  *
@@ -86,24 +90,18 @@ class User extends BaseUser
      */
     private $birthdate;
 
-    /**
-     * @var array
-     *
-     * @ORM\OneToOne(targetEntity="Efrei\Readyo\UserBundle\Entity\UserPicture", cascade={"persist"})
-     *
-     */
-    private $picture;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="validateAt", type="datetime", nullable=true)
-     * 
-     * @Expose
-     * @Groups({"list", "details"})
-     * @Since("1.0")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $validateAt;
+    private $picturePath;
+
+    /**
+     * @Assert\File(maxSize="2048k")
+     * @Assert\Image(mimeTypesMessage="Please upload a valid image.")
+     */
+    public $pictureFile;
+
 
     
     /**
@@ -120,9 +118,10 @@ class User extends BaseUser
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="lastConnection", type="datetime", nullable=true)
+     * @ORM\Column(name="modifiedTime", type="datetime", nullable=true)
      */
-    private $lastConnectionAt;
+    private $modifiedTime;
+
 
 
     /**
@@ -138,21 +137,6 @@ class User extends BaseUser
      * @ORM\OneToMany(targetEntity="Efrei\Readyo\UserBundle\Entity\AuthToken", mappedBy="user")
      */
     private $tokens;
-
-
-    /**
-     * @VirtualProperty
-     * @Type("string")
-     * @SerializedName("picture")
-     * @Groups({"details"})
-     * @Since("1.0")
-     */
-    public function picture() {
-        if($this->picture)
-            return $this->picture->getWebPath();
-        else
-            return null;
-    }
 
 
     /**
@@ -281,51 +265,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set validateAt
-     *
-     * @param \DateTime $validateAt
-     * @return User
-     */
-    public function setValidateAt($validateAt)
-    {
-        $this->validateAt = $validateAt;
-
-        return $this;
-    }
-
-    /**
-     * Get validateAt
-     *
-     * @return \DateTime 
-     */
-    public function getValidateAt()
-    {
-        return $this->validateAt;
-    }
-
-    /**
-     * Set picture
-     *
-     * @param \Efrei\Readyo\UserBundle\Entity\UserPicture $picture
-     * @return User
-     */
-    public function setPicture(\Efrei\Readyo\UserBundle\Entity\UserPicture $picture = null)
-    {
-        $this->picture = $picture;
-
-        return $this;
-    }
-
-    /**
-     * Get picture
-     *
-     * @return \Efrei\Readyo\UserBundle\Entity\UserPicture 
-     */
-    public function getPicture()
-    {
-        return $this->picture;
-    }
-    /**
      * Constructor
      */
     public function __construct()
@@ -334,28 +273,6 @@ class User extends BaseUser
         parent::__construct();
     }
 
-    /**
-     * Set lastConnectionAt
-     *
-     * @param \DateTime $lastConnectionAt
-     * @return User
-     */
-    public function setLastConnectionAt($lastConnectionAt)
-    {
-        $this->lastConnectionAt = $lastConnectionAt;
-
-        return $this;
-    }
-
-    /**
-     * Get lastConnectionAt
-     *
-     * @return \DateTime 
-     */
-    public function getLastConnectionAt()
-    {
-        return $this->lastConnectionAt;
-    }
 
     /**
      * Add comments
@@ -421,5 +338,126 @@ class User extends BaseUser
     public function getTokens()
     {
         return $this->tokens;
+    }
+
+
+
+
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+
+        if ($this->pictureFile !== null) {
+            $this->removePicture($this->getPictureAbsolutePath());
+            $this->picturePath = sha1(uniqid(mt_rand(), true)).'.'.$this->pictureFile->guessExtension();
+        }
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+
+        if ($this->pictureFile !== null) {
+            $this->pictureFile->move($this->getUploadRootDir(), $this->picturePath);
+            unset($this->pictureFile);
+        }
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        $this->removePicture($this->getPictureAbsolutePath());
+    }
+
+
+    private function removePicture($file) {
+
+        if(!empty($file))
+            unlink($file);
+    }
+
+
+    public function getPictureAbsolutePath()
+    {
+        return null === $this->picturePath ? null : $this->getUploadRootDir().'/'.$this->picturePath;
+    }
+
+    /**
+     * @VirtualProperty
+     * @Type("string")
+     * @SerializedName("picture")
+     * @Groups({"list", "details"})
+     */
+    public function getPictureWebPath()
+    {
+        return null === $this->picturePath ? null : $this->getUploadDir().'/'.$this->picturePath;
+    }
+
+    protected function getUploadRootDir()
+    {
+        // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+    protected function getUploadDir()
+    {
+        // on se débarrasse de « __DIR__ » afin de ne pas avoir de problème lorsqu'on affiche
+        // le document/image dans la vue.
+        return 'data/users/pictures';
+    }
+
+    /**
+     * Set picturePath
+     *
+     * @param string $picturePath
+     * @return User
+     */
+    public function setPicturePath($picturePath)
+    {
+        $this->picturePath = $picturePath;
+
+        return $this;
+    }
+
+    /**
+     * Get picturePath
+     *
+     * @return string 
+     */
+    public function getPicturePath()
+    {
+        return $this->picturePath;
+    }
+
+    /**
+     * Set modifiedTime
+     *
+     * @param \DateTime $modifiedTime
+     * @return User
+     */
+    public function setModifiedTime($modifiedTime)
+    {
+        $this->modifiedTime = $modifiedTime;
+
+        return $this;
+    }
+
+    /**
+     * Get modifiedTime
+     *
+     * @return \DateTime 
+     */
+    public function getModifiedTime()
+    {
+        return $this->modifiedTime;
     }
 }

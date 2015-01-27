@@ -15,6 +15,12 @@ admin_user_show:
     requirements:
         userid:  \d+
 
+admin_user_edit:
+    path:     /admin/users/{userid}/edit
+    defaults: { _controller: EfreiReadyoUserBundle:AdminUser:edit }
+    requirements:
+        userid:  \d+
+
 admin_user_promotion:
     path:     /admin/users/{userid}/promotion
     defaults: { _controller: EfreiReadyoUserBundle:AdminUser:promotion }

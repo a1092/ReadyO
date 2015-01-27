@@ -10,7 +10,7 @@
 			<h3>
 				<i class="fa fa-user"></i> <span class="text-capitalize">{{ user.firstname }}</span> <span class="text-uppercase">{{ user.lastname }}</span>
 				<div class="pull-right">
-					<a class="btn btn-theme03" href="{{ path('admin_user_register') }}">Modifier</a>
+					<a class="btn btn-theme03" href="{{ path('admin_user_edit', {'userid': user.id}) }}">Modifier</a>
 				</div>
 			</h3>
 

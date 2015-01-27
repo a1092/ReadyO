@@ -29,7 +29,9 @@ class RegistrationForm extends AbstractType
             ->add('lastname', 'text')
             ->add('gender', new GenderType())
             ->add('birthdate', 'date', array('widget' => 'single_text', "format" => "yyyy-MM-dd"))
-            ->add('picture', new UserPictureType())
+            ->add('pictureFile', 'file', array(
+                'required' => false
+            ))
         ;
 
         if($this->api) {

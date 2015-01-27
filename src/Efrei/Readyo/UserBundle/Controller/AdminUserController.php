@@ -98,6 +98,39 @@ class AdminUserController extends Controller
     }
 
 
+    public function editAction(Request $request, $userid) {
+        
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->container->get('fos_user.user_manager');
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $em->getRepository('EfreiReadyoUserBundle:User')->findOneById($userid);
+
+        if (!$user) {
+            throw $this->createNotFoundException('Unable to find User.');
+        }
+
+
+        $form = $this->createForm(new UserForm(false), $user, array(
+            'method' => "POST",
+            'csrf_protection' => true
+        ));
+
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            
+            $user->setModifiedTime(new \DateTime());
+            $userManager->updateUser($user);
+
+            return $this->redirect($this->generateUrl('admin_user_show', array("userid" => $user->getId())));
+        }
+
+        return $this->render('EfreiReadyoUserBundle:Admin:Edit.html.twig', array(
+            'form' => $form->createView()
+        ));
+    }
 
     public function showAction($userid) {
 
