@@ -45,10 +45,6 @@ class MusicPlayed
      * 
      * @ORM\ManyToOne(targetEntity="Efrei\Readyo\WebradioBundle\Entity\Schedule", inversedBy="playlist")
      * @ORM\JoinColumn(nullable=false)
-     *
-     * @Expose
-     * @Groups({"details"})
-     * @Since("1.0")
      */
     private $schedule;
 
