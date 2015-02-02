@@ -31,16 +31,6 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
     	$this->em = $em;
         $this->pp = $pp;
 
-        $this->logger = function($message, $level = 'info') {
-            echo "[".strtoupper($level)."]\t[".date("d/m/Y H:i:s")."]\t".$message."\n";
-        };
-
-
-        $this->setLogger(function($message, $level = 'info') {
-            echo "[".strtoupper($level)."]\t[".date("d/m/Y H:i:s")."]\t".$message."\n";
-        });
-
-
         $this->applications = array();
         $this->topics = array();
 
@@ -62,7 +52,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
             
             $application = $this->applications[$client->getId()];
 
-            $this->log("The application ".$application->getName()." was disconnected.");
+            $this->log($message->getApplication()->getName()." : Client was disconnected.", "INFO");
 
             foreach($application->getTopics() as $topic) {
                 $this->topics[$topic->getPath()]->removeApplication($application);
@@ -106,7 +96,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
 
                 $messages[] = $message;
 
-                $this->log("[".$message->getTopic()."]\t".json_encode($message->getData()), "INFO");
+                $this->log($message->getApplication()->getName()." : [".$message->getTopic()."]\t".json_encode($message->getData()), "INFO");
 
             } catch(AuthenticationException $e) {
                 
@@ -123,8 +113,9 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
 
                 $this->applications[$client->getId()] = $application;
 
-                $this->log("Authentication succeeded for ".$application->getName());
-                
+                $this->log($message->getApplication()->getName()." : [".$message->getTopic()."]\t"."Authentication succeeded", "INFO");
+
+
                 $messages[] = $message;
 
 
@@ -211,7 +202,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
                         $application->addTopic($topic);
                         $this->topics[$topic->getPath()]->addApplication($application);
 
-                        $this->log("Application ".$application->getName()." has subscribed to topic '".$topic->getPath()."'", "INFO");
+                        $this->log($application->getName()." : Subscription to [".$topic->getPath()."] successful.", "INFO");
                     }
                 }
             }
