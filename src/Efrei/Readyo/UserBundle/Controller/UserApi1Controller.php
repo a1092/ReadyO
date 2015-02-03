@@ -286,7 +286,11 @@ class UserApi1Controller extends FOSRestController
 
         } else {
             
-            $view = View::create($form, 400);
+            $view = $this->view();
+            $view->setSerializationContext(SerializationContext::create()
+                ->setSerializeNull(true)
+            );
+            $view->setData($form, 400);
         }
 
         return $this->get('fos_rest.view_handler')->handle($view);     

@@ -26,7 +26,7 @@ class UserForm extends AbstractType
                 ->add('firstname', 'text', array('required' => true))
                 ->add('lastname', 'text', array('required' => true))
                 ->add('gender', new GenderType(), array('required' => true))
-                ->add('birthdate', 'date', array('widget' => 'single_text', "format" => "yyyy-MM-dd"))
+                ->add('birthdate', 'date', array('widget' => 'single_text', "format" => "yyyy-MM-dd", "required" => true))
                 ->add('pictureFile', 'file', array(
                     'required' => false
                 ))
