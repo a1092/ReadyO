@@ -52,7 +52,7 @@ class PalladiumApplication extends \Varspool\WebsocketBundle\Application\Applica
             
             $application = $this->applications[$client->getId()];
 
-            $this->log($message->getApplication()->getName()." : Client was disconnected.", "INFO");
+            $this->log($application->getName()." : Client was disconnected.", "INFO");
 
             foreach($application->getTopics() as $topic) {
                 $this->topics[$topic->getPath()]->removeApplication($application);
