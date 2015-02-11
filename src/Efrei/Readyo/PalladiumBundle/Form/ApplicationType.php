@@ -18,6 +18,8 @@ class ApplicationType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('privateKey')
+            ->add('multiconnexion', 'checkbox', array("required"=> false))
+            ->add('connected', 'checkbox', array("required"=> false))
             ->add('active', 'checkbox', array("required"=> false))
         ;
     }

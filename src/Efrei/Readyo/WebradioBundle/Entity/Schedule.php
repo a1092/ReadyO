@@ -33,7 +33,7 @@ class Schedule
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      */
     private $id;
@@ -45,7 +45,7 @@ class Schedule
      * @ORM\Column(name="title", type="string", length=200)
      *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      */
     private $title;
@@ -56,7 +56,7 @@ class Schedule
      * @ORM\Column(name="subTitle", type="string", length=200)
      *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      */
     private $subTitle;
@@ -82,7 +82,7 @@ class Schedule
     * @ORM\Column(name="summary", type="text")
     *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      * @SerializedName("summary")
     */
@@ -95,7 +95,7 @@ class Schedule
     * @ORM\Column(name="guests", type="text")
     *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      * @SerializedName("guests")
     */
@@ -108,7 +108,7 @@ class Schedule
      * @ORM\Column(name="diffusedAt", type="datetime")
      *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      */
     private $diffusedAt;
@@ -120,7 +120,7 @@ class Schedule
      * @ORM\Column(name="finishedAt", type="datetime")
      *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      */
     private $finishedAt;
@@ -132,7 +132,7 @@ class Schedule
      * @ORM\Column(name="duration", type="integer")
      *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      */
     private $duration;
@@ -152,7 +152,7 @@ class Schedule
      * @ORM\Column(name="isLive", type="boolean")
      *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      */
     private $isLive;
@@ -188,7 +188,7 @@ class Schedule
      * @ORM\Column(name="spotifyUri", type="string", length=200)
      *
      * @Expose
-     * @Groups({"list", "details"})
+     * @Groups({"list", "details", "live"})
      * @Since("1.0")
      */
     private $spotifyUri;

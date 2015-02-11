@@ -59,6 +59,31 @@ class Application
     private $messages;
 
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="connected", type="boolean")
+     *
+     */
+    private $connected;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="multiconnexion", type="boolean")
+     *
+     */
+    private $multiconnexion;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastActivity", type="datetime", nullable=true)
+     */
+    private $lastActivity;
+
+
+
 
     private $authenticated;
     private $topics;
@@ -170,7 +195,7 @@ class Application
      *
      * @return boolean 
      */
-    public function getActive()
+    public function isActive()
     {
         return $this->active;
     }
@@ -282,5 +307,74 @@ class Application
 
     public function __toString() {
         return $this->getName();
+    }
+
+    /**
+     * Set connected
+     *
+     * @param boolean $connected
+     * @return Application
+     */
+    public function setConnected($connected)
+    {
+        $this->connected = $connected;
+
+        return $this;
+    }
+
+    /**
+     * Get connected
+     *
+     * @return boolean 
+     */
+    public function isConnected()
+    {
+        return $this->connected;
+    }
+
+    /**
+     * Set lastActivity
+     *
+     * @param \DateTime $lastActivity
+     * @return Application
+     */
+    public function setLastActivity($lastActivity)
+    {
+        $this->lastActivity = $lastActivity;
+
+        return $this;
+    }
+
+    /**
+     * Get lastActivity
+     *
+     * @return \DateTime 
+     */
+    public function getLastActivity()
+    {
+        return $this->lastActivity;
+    }
+
+    /**
+     * Set multiconnexion
+     *
+     * @param boolean $multiconnexion
+     * @return Application
+     */
+    public function setMulticonnexion($multiconnexion)
+    {
+        $this->multiconnexion = $multiconnexion;
+
+        return $this;
+    }
+
+    /**
+     * Get multiconnexion
+     *
+     * @return boolean 
+     */
+    public function getMulticonnexion()
+    {
+        return $this->multiconnexion;
     }
 }

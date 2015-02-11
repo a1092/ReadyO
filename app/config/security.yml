@@ -38,6 +38,11 @@ security:
             anonymous: true
             stateless: true
 
+        api_palladium:
+            pattern: ^/api/palladium
+            anonymous: true
+            stateless: true
+
         api:
             pattern:   ^/api
             stateless: true
@@ -70,6 +75,7 @@ security:
         - { path: ^/api/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/palladium, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
 
         - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }

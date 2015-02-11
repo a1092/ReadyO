@@ -22,7 +22,9 @@ fos_user_registration_confirm:
     defaults:
         _url: "http://www.readyo.fr/"
 
-
+api_palladium:
+    resource: "@EfreiReadyoPalladiumBundle/Resources/config/routing_palladium.yml"
+    prefix:   /api/palladium
 
 efrei_readyo_live:
     resource: "@EfreiReadyoLiveBundle/Resources/config/routing.yml"
