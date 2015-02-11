@@ -185,7 +185,7 @@ class Schedule
     /**
      * @var string
      *
-     * @ORM\Column(name="spotifyUri", type="string", length=200)
+     * @ORM\Column(name="spotifyUri", type="string", length=200, nullable=true)
      *
      * @Expose
      * @Groups({"list", "details", "live"})
