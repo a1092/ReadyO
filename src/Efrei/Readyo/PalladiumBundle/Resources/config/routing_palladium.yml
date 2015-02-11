@@ -1,0 +1,52 @@
+api_palladium_restart:
+    path:     /restart
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Api:restart }
+    requirements:
+        _method:  POST
+
+
+api_palladium_log:
+    path:     /log
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Api:log }
+    requirements:
+        _method:  POST
+
+
+api_palladium_application_connection:
+    path:     /application/connect
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Api:connectApp }
+    requirements:
+        _method:  POST
+
+api_palladium_application_disconnection:
+    path:     /application/disconnect
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Api:disconnectApp }
+    requirements:
+        _method:  POST
+
+
+
+
+api_palladium_live_authentication_check:
+    path:     /live/authenticate/check
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Api:checkCredential }
+    requirements:
+        _method:  POST
+
+api_palladium_music_playing:
+    path:     /music/playing
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Api:musicPlaying }
+    requirements:
+        _method:  POST
+
+api_palladium_live_message_receive:
+    path:     /live/message/receive
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Api:liveMessage }
+    requirements:
+        _method:  POST
+
+api_palladium_schedule_starting:
+    path:     /schedule/status
+    defaults: { _controller: EfreiReadyoPalladiumBundle:Api:scheduleStatus }
+    requirements:
+        _method:  POST
